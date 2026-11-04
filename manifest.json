@@ -1,22 +1,19 @@
 {
-  "name": "Honores de Ordenanza",
-  "short_name": "Honores",
-  "description": "Ceremonial y Honores de Ordenanza de la Armada Española",
+  "name": "Banda de Música y Corneta",
+  "short_name": "Música",
+  "description": "Himnos internacionales, marchas y toques de corneta",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#070d1e",
-  "theme_color": "#0f172a",
   "orientation": "portrait",
+  "background_color": "#070d1e",
+  "theme_color": "#070d1e",
   "icons": [
     {
-      "src": "./img/banderaespana.jpg",
-      "sizes": "192x192",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "./img/banderaespana.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg"
+      "src": "badge_5_musica.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
