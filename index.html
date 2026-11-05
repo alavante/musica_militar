@@ -1,340 +1,1198 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta charset="UTF-8">
+  <title>Música Militar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#070d1e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>MESANA · Marchas Españolas y Sonidos A bordo de Nuestra Armada </title>
+  <meta name="apple-mobile-web-app-title" content="Música Militar">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    body {
-      background: #070d1e;
-      color: #f1f5f9;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px;
-    }
-    .container {
-      width: 100%;
-      max-width: 520px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    /* CABECERA NAVAL */
-    .header-card {
-      background: linear-gradient(180deg, #0f1c3f 0%, #0a132c 100%);
-      border: 1.5px solid #1e3a8a;
-      border-radius: 14px;
-      padding: 20px 16px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
-    .header-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #c2410c 0%, #facc15 50%, #c2410c 100%);
-    }
-    .escudo-icon {
-      font-size: 32px;
-      margin-bottom: 6px;
-      display: inline-block;
-    }
-    .titulo-principal {
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: 1.5px;
-      color: #38bdf8;
-      text-transform: uppercase;
-    }
-    .subtitulo {
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: #cbd5e1;
-      margin-top: 4px;
-      text-transform: uppercase;
-    }
-    .lema {
-      font-size: 11px;
-      font-style: italic;
-      color: #facc15;
-      margin-top: 6px;
-      letter-spacing: 0.5px;
-    }
-
-    /* LISTA DE MÓDULOS NAVALES */
-    .modulos-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .modulo-btn {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: #0f172a;
-      border: 1.5px solid #1e293b;
-      border-left: 4px solid #0284c7;
-      border-radius: 12px;
-      padding: 14px 16px;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.15s ease-in-out;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    }
-    .modulo-btn:active {
-      transform: scale(0.98);
-      background: #1e293b;
-      border-color: #38bdf8;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: #030712; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; }
     
-    .modulo-icon {
-      flex-shrink: 0;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    header {
+      background: #0f172a; border-bottom: 2px solid #1e3a8a; padding: 12px 16px;
+      display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
     }
-    .modulo-info {
-      flex: 1;
-      min-width: 0;
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand img { width: 38px; height: 38px; border-radius: 6px; object-fit: cover; border: 1.5px solid #38bdf8; }
+    .brand-title { font-size: 15px; font-weight: 800; color: #38bdf8; line-height: 1.15; }
+    .brand-sub { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; }
+
+    /* Canal Dual de Estado de Sonido */
+    .dual-status-container {
+      position: sticky; top: 64px; z-index: 99; margin: 8px 12px 4px 12px; display: flex; flex-direction: column; gap: 6px;
     }
-    .modulo-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: #f8fafc;
-      letter-spacing: 0.3px;
+    .status-bar-channel {
+      border-radius: 8px; padding: 10px 14px; display: none; align-items: center; justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4); animation: pulseAlert 2s infinite;
     }
-    .modulo-desc {
-      font-size: 11px;
-      color: #94a3b8;
-      margin-top: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .status-bar-banda { background: linear-gradient(135deg, #0369a1 0%, #0c4a6e 100%); border: 1.5px solid #38bdf8; }
+    .status-bar-corneta { background: linear-gradient(135deg, #b45309 0%, #78350f 100%); border: 1.5px solid #f59e0b; }
+    
+    @keyframes pulseAlert {
+      0% { opacity: 0.95; } 50% { opacity: 1; } 100% { opacity: 0.95; }
     }
-    .modulo-arrow {
-      font-size: 16px;
-      color: #64748b;
-      flex-shrink: 0;
+    .status-channel-text {
+      font-size: 12px; font-weight: 800; color: white; display: flex; align-items: center; gap: 6px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 72%;
+    }
+    .status-stop-btn {
+      background: #dc2626; border: none; color: white; padding: 6px 12px; border-radius: 6px;
+      font-size: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase;
+    }
+    .status-stop-btn:active { transform: scale(0.95); }
+
+    main { flex: 1; padding: 8px 12px 24px 12px; max-width: 650px; margin: 0 auto; width: 100%; }
+
+    .card {
+      background: #0f1b33; border: 1.5px solid #1e3a8a; border-radius: 14px; padding: 16px 14px;
+      margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+      position: relative; overflow: hidden;
+    }
+    .card-block-1 { border-top: 3.5px solid #38bdf8; }
+    .card-block-2 { border-top: 3.5px solid #38bdf8; }
+    .card-block-3 { border-top: 3.5px solid #38bdf8; }
+    .card-title {
+      font-size: 13px; font-weight: 800; color: #38bdf8; text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-badge {
+      background: #1e3a8a; color: #93c5fd; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: 700;
     }
 
-    /* PIE DE PÁGINA */
-    footer {
-      text-align: center;
-      margin-top: 20px;
-      padding: 12px;
-      color: #64748b;
-      font-family: monospace;
-      font-size: 11px;
+    /* Grupos de campos y selects */
+    .field-group { margin-bottom: 10px; }
+    .field-label { font-size: 11px; font-weight: 800; color: #cbd5e1; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; text-transform: uppercase; }
+    .custom-select {
+      width: 100%; background: #1e293b; color: #f8fafc; border: 1.5px solid #334155;
+      border-radius: 8px; padding: 10px 12px; font-size: 13px; font-weight: 700;
+      outline: none; cursor: pointer; transition: 0.15s;
     }
-    .copy {
-      font-weight: 700;
-      color: #94a3b8;
-      margin-bottom: 2px;
+    .custom-select:focus, .custom-select.selected { border-color: #38bdf8; background: #0c4a6e; }
+
+        /* Botones de acción destructiva (Borrar) */
+    .btn-danger-action {
+      background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%) !important;
+      border: 1.5px solid #ef4444 !important; color: white !important;
+      box-shadow: 0 2px 6px rgba(185, 28, 28, 0.4) !important;
+      transition: all 0.15s ease;
+    }
+    .btn-danger-action:active { transform: scale(0.96) !important; }
+
+    /* Botonera común para desplegables */
+    .common-btn-bar {
+      display: grid; grid-template-columns: 2fr 1.5fr 1.2fr; gap: 8px; margin-top: 14px; padding-top: 10px;
+      border-top: 1px dashed #334155;
+    }
+    .btn-action-main {
+      border: none; border-radius: 8px; padding: 12px 10px; font-size: 12px; font-weight: 800;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: all 0.15s ease; touch-action: manipulation; text-transform: uppercase;
+    }
+    .btn-action-main:active { transform: scale(0.97); }
+    .btn-play-banda { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; border: 1.5px solid #38bdf8; }
+    .btn-add-banda { background: #1e293b; color: #38bdf8; border: 1.5px solid #475569; }
+    .btn-lyrics-banda { background: #334155; color: #f1f5f9; border: 1.5px solid #475569; }
+
+    /* Botones de Corneta debajo de la barra */
+    .corneta-btn-bar {
+      display: grid; grid-template-columns: 2fr 1.5fr; gap: 8px; margin-top: 10px;
+    }
+    .btn-play-corneta { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; border: 1.5px solid #38bdf8; }
+    .btn-add-corneta { background: #1e293b; color: #38bdf8; border: 1.5px solid #475569; }
+
+    /* Playlists completas con reordenación y persistencia */
+    .playlist-top-controls {
+      display: flex; gap: 8px; margin-bottom: 10px;
+    }
+    .playlist-select-active {
+      flex: 1; background: #1e293b; color: #f8fafc; border: 1.5px solid #38bdf8;
+      border-radius: 8px; padding: 10px; font-size: 12px; font-weight: 700;
+    }
+    .btn-pl-small { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 1.5px solid #38bdf8; color: white; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+
+    .playlist-window {
+      background: #070d1e; border: 1.5px solid #1e3a8a; border-radius: 8px; padding: 8px;
+      min-height: 120px; max-height: 240px; overflow-y: auto; margin-bottom: 10px;
+    }
+    .pl-item-row {
+      display: flex; align-items: center; justify-content: space-between; padding: 8px 10px;
+      background: #1e293b; border-radius: 6px; margin-bottom: 5px; font-size: 12px; font-weight: 700;
+      border: 1.5px solid transparent; cursor: pointer; transition: 0.1s;
+    }
+    .pl-item-row:hover { border-color: #475569; }
+    .pl-item-row.selected {
+      border-color: #38bdf8; background: #0c4a6e; color: #ffffff;
+    }
+    .pl-item-row.active-playing {
+      border-color: #22c55e; background: #14532d; color: #bbf7d0; animation: pulseAlert 1.5s infinite;
+    }
+
+    .playlist-reorder-bar {
+      display: flex; gap: 8px; align-items: center; margin-bottom: 12px;
+    }
+    .btn-reorder { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 1px solid #38bdf8; color: white; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .btn-reorder:active { transform: scale(0.95); }
+    .btn-del-item { background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%); border: 1.5px solid #ef4444; color: white; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; margin-left: auto; transition: 0.15s; } .btn-del-item:active { transform: scale(0.95); } .btn-del-item:active { transform: scale(0.95); }
+
+    .playlist-exec-bar { display: grid; grid-template-columns: 1.4fr 1.1fr 1.1fr; gap: 8px; }
+
+    /* Modal de Letras */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-content {
+      background: #0f172a; border: 2px solid #38bdf8; border-radius: 14px; width: 100%; max-width: 500px;
+      max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+    }
+    .modal-header {
+      background: #1e293b; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+    .modal-title { font-size: 14px; font-weight: 800; color: #38bdf8; }
+    .modal-close-btn { background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; }
+    .modal-body { padding: 16px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #e2e8f0; white-space: pre-wrap; }
+    .modal-author { font-size: 11px; color: #94a3b8; margin-bottom: 12px; font-style: italic; }
+
+    footer {
+      background: #090e1a; border-top: 1px solid #1e293b; padding: 14px; text-align: center;
+      font-size: 11px; color: #64748b; font-weight: 600; margin-top: auto;
     }
   </style>
-  <link rel="manifest" href="manifest.json">
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      });
-    }
-  </script>
 </head>
 <body>
-  <div class="container">
-    <!-- CABECERA -->
-    <header class="header-card">
-      <div class="escudo-icon" style="margin-bottom: 0; line-height: 0;">
-        <img src="escudo_elcano_header.png" alt="Escudo Juan Sebastián de Elcano" style="display: block; width: 55px; height: auto; max-height: 77px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));">
+
+  <header>
+    <div class="brand">
+      <img src="badge_5_musica.png" alt="Badge" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: none; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4);">
+      <div>
+        <div class="brand-title">Música Militar</div>
       </div>
-      <h1 class="titulo-principal" style="margin-top: 4px;">MESANA</h1>
-<div class="subtitulo" style="font-size: 12px; letter-spacing: 0.5px; color: #cbd5e1; text-transform: none; margin-top: 6px;"><span style="font-weight: 900; font-size: 1.15em; color: #38bdf8;">M</span>archas <span style="font-weight: 900; font-size: 1.15em; color: #38bdf8;">E</span>spañolas y <span style="font-weight: 900; font-size: 1.15em; color: #38bdf8;">S</span>onidos <span style="font-weight: 900; font-size: 1.15em; color: #38bdf8;">A</span> bordo de <span style="font-weight: 900; font-size: 1.15em; color: #38bdf8;">N</span>uestra <span style="font-weight: 900; font-size: 1.15em; color: #38bdf8;">A</span>rmada</div>
+    </div>  
 
+  <a href="https://alavante.github.io/Mesana/" style="display:inline-flex; align-items:center; gap:5px; background:#1e293b; border:1px solid #0284c7; color:#38bdf8; padding:5px 10px; border-radius:6px; font-size:13px; font-weight:800; text-decoration:none; margin-left:auto;">⚓ Mesana</a>
+  
+  </header>
 
-      
+  <!-- CANAL DUAL DE REPRODUCCIÓN (BANDA Y CORNETA INDEPENDIENTES) -->
+  <div class="dual-status-container">
+    <div id="statusBandaMMT" class="status-bar-channel status-bar-banda">
+      <div id="statusBandaTextMMT" class="status-channel-text">🎺 Banda: Sonando...</div>
+      <button type="button" class="status-stop-btn" onclick="stopBandaMMT()">🛑 PARAR BANDA</button>
+    </div>
+    <div id="statusCornetaMMT" class="status-bar-channel status-bar-corneta">
+      <div id="statusCornetaTextMMT" class="status-channel-text">📯 Corneta: Orden activa...</div>
+      <button type="button" class="status-stop-btn" onclick="stopCornetaMMT()">🛑 PARAR CORNETA</button>
+    </div>
+  </div>
 
-      <div class="lema">Centenario B.E. "Juan Sebastián de Elcano"</div>
-    </header>
-
-    <!-- MÓDULOS EN ORDEN OFICIAL -->
-    <main class="modulos-grid">
-      <!-- 1. Chifle Virtual -->
-      <a href="https://alavante.github.io/CHIFLE_VIRTUAL_PWA/" class="modulo-btn">
-        <div class="modulo-icon"><img src="badge_1_chifle.png" alt="Módulo 1" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.4); display: block;"></div>
-        <div class="modulo-info">
-          <div class="modulo-title">Chifle Virtual</div>
-          <div class="modulo-desc">Portalón, toques de maniobra y rutina de a bordo</div>
+  <main>
+    <!-- BLOQUE 1: BANDA DE MÚSICA -->
+    <div class="card card-block-1">
+      <div class="card-title">
+        <span>🎺 BANDA DE MÚSICA</span>
         </div>
-        <div class="modulo-arrow">➔</div>
-      </a>
 
-      <!-- 2. Honores entre Buques -->
-      <a href="https://alavante.github.io/Honores_buques/" class="modulo-btn">
-        <div class="modulo-icon"><img src="badge_2_buques.png" alt="Módulo 2" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.4); display: block;"></div>
-        <div class="modulo-info">
-          <div class="modulo-title">Honores entre Buques</div>
-          <div class="modulo-desc">Atención por babor y estribor, saludos y retirada</div>
-        </div>
-        <div class="modulo-arrow">➔</div>
-      </a>
-
-      <!-- 3. Izado y Arriado a Bordo -->
-      <a href="https://alavante.github.io/izado_base/bordo.html" class="modulo-btn">
-        <div class="modulo-icon"><img src="badge_3_izado.png" alt="Módulo 3" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.4); display: block;"></div>
-        <div class="modulo-info">
-          <div class="modulo-title">Izado y Arriado a Bordo</div>
-          <div class="modulo-desc">Secuencia ceremonial, calculo ocaso...</div>
-        </div>
-        <div class="modulo-arrow">➔</div>
-      </a>
-
-      <!-- 6. Izado y Arriado en Bases y Acuartelamientos (posicionado tras el 3, numeración sin cambios) -->
-      <a href="https://alavante.github.io/izado_base/tierra.html" class="modulo-btn">
-        <div class="modulo-icon"><img src="badge_6_tierra.png" alt="Módulo 6" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.4); display: block;"></div>
-        <div class="modulo-info">
-          <div class="modulo-title">Izado y Arriado en Bases</div>
-          <div class="modulo-desc">Ceremonial en bases y acuartelamientos</div>
-        </div>
-        <div class="modulo-arrow">➔</div>
-      </a>
-
-      <!-- 4. Honores a Autoridades -->
-      <a href="https://alavante.github.io/honores_autoridades/" class="modulo-btn">
-        <div class="modulo-icon"><img src="badge_4_autoridades.png" alt="Módulo 4" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.4); display: block;"></div>
-        <div class="modulo-info">
-          <div class="modulo-title">Honores a Autoridades</div>
-          <div class="modulo-desc">Protocolo voces, salvas e himnos autoridades</div>
-        </div>
-        <div class="modulo-arrow">➔</div>
-      </a>
-
-      <!-- 5. Banda de Música -->
-      <a href="https://alavante.github.io/musica_militar/" class="modulo-btn">
-        <div class="modulo-icon"><img src="badge_5_musica.png" alt="Módulo 5" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.4); display: block;"></div>
-        <div class="modulo-info">
-          <div class="modulo-title">Banda de Música y Corneta </div>
-          <div class="modulo-desc">Himnos internacionales, marchas y letras militares</div>
-        </div>
-        <div class="modulo-arrow">➔</div>
-      </a>
-    </main>
-
-      <!-- PACK SIN CONEXIÓN -->
-      <div id="packBox" style="margin-top:14px; padding:10px 12px; background:#0b152d; border:1px solid #1e3a8a; border-radius:10px; font-size:11.5px; color:#cbd5e1; text-align:center;">
-        <div id="packEstado" style="font-weight:700;">Pack sin conexión: comprobando…</div>
-        <div style="height:6px; background:#1e293b; border-radius:3px; margin:8px 0; overflow:hidden;"><div id="packBarra" style="height:100%; width:0%; background:#38bdf8; transition:width .3s;"></div></div>
-        <button id="packBtn" onclick="instalarPackIAB(true)" style="background:#0c4a6e; border:1px solid #0284c7; color:#e0f2fe; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:800; cursor:pointer;">⬇ Descargar / continuar pack</button>
+      <!-- Desplegable 1: Himnos Institucionales y Países -->
+      <div class="field-group">
+        <label class="field-label" for="selCatInstitucionales">🌍 1. Himnos de España y Países (155)</label>
+        <select id="selCatInstitucionales" class="custom-select" onchange="onMusicaSelectChange(this, 'institucionales')">
+            <option value="">-- Seleccione Himno (España / Países Extranjeros) --</option>
+            <option value="ant_afghanistan">Afghanistan</option>
+            <option value="ant_albania">Albania</option>
+            <option value="ant_alemania">Alemania (Das Lied der Deutschen)</option>
+            <option value="ant_angola">Angola</option>
+            <option value="ant_antiguabarbuda">Antigua Barbuda</option>
+            <option value="ant_antillasholandesas">Antillas Holandesas</option>
+            <option value="ant_arabiasaudita">Arabia Saudita</option>
+            <option value="ant_argelia">Argelia</option>
+            <option value="ant_argentina">Argentina</option>
+            <option value="ant_armenia">Armenia</option>
+            <option value="ant_aruba">Aruba</option>
+            <option value="ant_australia">Australia</option>
+            <option value="ant_austria">Austria</option>
+            <option value="ant_azerbaiyan">Azerbaiyan</option>
+            <option value="ant_bahamas">Bahamas</option>
+            <option value="ant_bahrein">Bahrein</option>
+            <option value="ant_banglades">Banglades</option>
+            <option value="ant_barbados">Barbados</option>
+            <option value="ant_belgica">Belgica</option>
+            <option value="ant_belice">Belice</option>
+            <option value="ant_benin">Benin</option>
+            <option value="ant_bielorusia">Bielorusia</option>
+            <option value="ant_bolivia">Bolivia</option>
+            <option value="ant_bosniah">Bosnia y Herzegovina</option>
+            <option value="ant_botsuana">Botsuana</option>
+            <option value="ant_brasil">Brasil</option>
+            <option value="ant_brunei">Brunei</option>
+            <option value="ant_bulgaria">Bulgaria</option>
+            <option value="ant_caboverde">Cabo Verde</option>
+            <option value="ant_camboya">Camboya</option>
+            <option value="ant_camerun">Camerun</option>
+            <option value="ant_canada">Canada</option>
+            <option value="ant_chad">Chad</option>
+            <option value="ant_chile">Chile</option>
+            <option value="ant_china">China</option>
+            <option value="ant_colombia">Colombia</option>
+            <option value="ant_congo">Congo</option>
+            <option value="ant_coreasur">Corea del Sur</option>
+            <option value="ant_costamarfil">Costa Marfil</option>
+            <option value="ant_costarica">Costa Rica</option>
+            <option value="ant_croacia">Croacia</option>
+            <option value="ant_cuba">Cuba</option>
+            <option value="ant_dinamarca">Dinamarca</option>
+            <option value="ant_dinamarcamr">Dinamarca (Marcha Real)</option>
+            <option value="ant_dominica">Dominica</option>
+            <option value="ant_eu">EU</option>
+            <option value="ant_ecuador">Ecuador</option>
+            <option value="ant_egipto">Egipto</option>
+            <option value="ant_emiratos">Emiratos</option>
+            <option value="ant_eritrea">Eritrea</option>
+            <option value="ant_eslovaquia">Eslovaquia</option>
+            <option value="ant_eslovenia">Eslovenia</option>
+            <option value="ant_eeuu">Estados Unidos (EE.UU.)</option>
+            <option value="ant_estonia">Estonia</option>
+            <option value="ant_filipinas">Filipinas</option>
+            <option value="ant_finlandia">Finlandia</option>
+            <option value="ant_francia">Francia (La Marsellesa)</option>
+            <option value="ant_gabon">Gabon</option>
+            <option value="ant_gambia">Gambia</option>
+            <option value="ant_georgia">Georgia</option>
+            <option value="ant_ghana">Ghana</option>
+            <option value="ant_grecia">Grecia</option>
+            <option value="ant_guatemala">Guatemala</option>
+            <option value="ant_guayana">Guayana</option>
+            <option value="ant_guinea">Guinea</option>
+            <option value="ant_guineabissau">Guinea Bissau</option>
+            <option value="ant_guineaecuatorial">Guinea Ecuatorial</option>
+            <option value="ant_haiti">Haiti</option>
+            <option value="mm_espaniacorto">Himno Nacional de España (Breve)</option>
+            <option value="mm_espanialargo">Himno Nacional de España (Completo)</option>
+            <option value="ant_honduras">Honduras</option>
+            <option value="ant_hungria">Hungria</option>
+            <option value="ant_india">India</option>
+            <option value="ant_indonesia">Indonesia</option>
+            <option value="ant_irak">Irak</option>
+            <option value="ant_irlanda">Irlanda</option>
+            <option value="ant_islandia">Islandia</option>
+            <option value="ant_israel">Israel</option>
+            <option value="ant_italia">Italia (Fratelli d'Italia)</option>
+            <option value="ant_jamaica">Jamaica</option>
+            <option value="ant_japon">Japon</option>
+            <option value="ant_jordania">Jordania</option>
+            <option value="ant_kazajistan">Kazajistan</option>
+            <option value="ant_kenia">Kenia</option>
+            <option value="ant_kuwait">Kuwait</option>
+            <option value="ant_laos">Laos</option>
+            <option value="ant_lesoto">Lesoto</option>
+            <option value="ant_letonia">Letonia</option>
+            <option value="ant_libano">Libano</option>
+            <option value="ant_liberia">Liberia</option>
+            <option value="ant_libia">Libia</option>
+            <option value="ant_liechtenstein">Liechtenstein</option>
+            <option value="ant_lituania">Lituania</option>
+            <option value="ant_luxemburgo">Luxemburgo</option>
+            <option value="ant_macedonia">Macedonia</option>
+            <option value="ant_madagascar">Madagascar</option>
+            <option value="ant_malasia">Malasia</option>
+            <option value="ant_maldivas">Maldivas</option>
+            <option value="ant_mali">Mali</option>
+            <option value="ant_malta">Malta</option>
+            <option value="ant_marruecos">Marruecos</option>
+            <option value="ant_mauricio">Mauricio</option>
+            <option value="ant_mauritania">Mauritania</option>
+            <option value="ant_mejico">Mejico</option>
+            <option value="ant_moldavia">Moldavia</option>
+            <option value="ant_monaco">Monaco</option>
+            <option value="ant_montenegro">Montenegro</option>
+            <option value="ant_mozambique">Mozambique</option>
+            <option value="ant_myanmar">Myanmar</option>
+            <option value="ant_namibia">Namibia</option>
+            <option value="ant_nepal">Nepal</option>
+            <option value="ant_nicaragua">Nicaragua</option>
+            <option value="ant_noruega">Noruega</option>
+            <option value="ant_nuevazelanda">Nueva Zelanda</option>
+            <option value="ant_otan">OTAN / NATO</option>
+            <option value="ant_oman">Oman</option>
+            <option value="ant_pakistan">Pakistan</option>
+            <option value="ant_panama">Panama</option>
+            <option value="ant_paisesbajos">Países Bajos</option>
+            <option value="ant_peru">Peru</option>
+            <option value="ant_polonia">Polonia</option>
+            <option value="ant_portugal">Portugal</option>
+            <option value="ant_puertorico">Puerto Rico</option>
+            <option value="ant_qatar">Qatar</option>
+            <option value="ant_reinounido">Reino Unido (God Save the King)</option>
+            <option value="ant_republicadominicana">Republica Dominicana</option>
+            <option value="ant_rcafricana">República Centroafricana</option>
+            <option value="ant_repcheca">República Checa</option>
+            <option value="ant_ruanda">Ruanda</option>
+            <option value="ant_rumania">Rumania</option>
+            <option value="ant_rusia">Rusia (Himno de la Federación Rusa)</option>
+            <option value="ant_salvador">Salvador</option>
+            <option value="ant_serbia">Serbia</option>
+            <option value="ant_seychelles">Seychelles</option>
+            <option value="ant_sierraleona">Sierra Leona</option>
+            <option value="ant_singapur">Singapur</option>
+            <option value="ant_sommalta">Soberana Orden de Malta</option>
+            <option value="ant_somalia">Somalia</option>
+            <option value="ant_srilanka">Sri Lanka</option>
+            <option value="ant_sudan">Sudan</option>
+            <option value="ant_suecia">Suecia</option>
+            <option value="ant_suiza">Suiza</option>
+            <option value="ant_tanzania">Tanzania</option>
+            <option value="ant_timororiental">Timor Oriental</option>
+            <option value="ant_trinidadtobago">Trinidad Tobago</option>
+            <option value="ant_tunez">Tunez</option>
+            <option value="ant_turquia">Turquia</option>
+            <option value="ant_ucrania">Ucrania</option>
+            <option value="ant_uganda">Uganda</option>
+            <option value="ant_ue">Unión Europea (Himno de la Alegría)</option>
+            <option value="ant_uruguay">Uruguay</option>
+            <option value="ant_vaticano">Vaticano</option>
+            <option value="ant_venezuela">Venezuela</option>
+            <option value="ant_yemen">Yemen</option>
+            <option value="ant_yibuti">Yibuti</option>
+        </select>
       </div>
 
+      <!-- Desplegable 2: Marchas Militares -->
+      <div class="field-group">
+        <label class="field-label" for="selCatMarchas">🥁 2. Marchas Militares (21)</label>
+        <select id="selCatMarchas" class="custom-select" onchange="onMusicaSelectChange(this, 'marchas')">
+            <option value="">-- Seleccione Marcha Militar --</option>
+            <option value="mm_bajoladobleaguila">Bajo La Doble Aguila</option>
+            <option value="mm_cantinera">Cantinera</option>
+            <option value="mm_noviodelamuerte">El Novio de la Muerte</option>
+            <option value="mm_elabanico">El abanico</option>
+            <option value="mm_elturuta">El turuta</option>
+            <option value="mm_elviejoalmirante">El viejo almirante</option>
+            <option value="mm_ganandobarlovento">Ganando Barlovento</option>
+            <option value="mm_heroina">Heroina</option>
+            <option value="mm_laorgiadorada">La Orgia Dorada</option>
+            <option value="mm_laguardiadealabarderos">La guardia de alabarderos</option>
+            <option value="mm_lavueltadelosvoluntarios">La vuelta de los voluntarios</option>
+            <option value="mm_lascorsarias">Las corsarias</option>
+            <option value="mm_losgenerales">Los Generales</option>
+            <option value="mm_losquintos">Los Quintos</option>
+            <option value="mm_marchadeinfantes">Marcha de infantes</option>
+            <option value="mm_maresyvientos">Mares y vientos</option>
+            <option value="mm_pasoligero">Paso ligero</option>
+            <option value="mm_proaalamar">Proa a la mar</option>
+            <option value="mm_sanmarcial">San Marcial</option>
+            <option value="mm_sanquintin">San Quintin</option>
+            <option value="mm_vuelostriunfales">Vuelos triunfales</option>
+        </select>
+      </div>
 
-    <!-- PIE -->
-    <footer>
-      <div class="copy">@TDF 2026</div>
+      <!-- Desplegable 3: Himnos de Armas y Cuerpos -->
+      <div class="field-group">
+        <label class="field-label" for="selCatHimnos">⚔️ 3. Himnos de Armas y Cuerpos (13)</label>
+        <select id="selCatHimnos" class="custom-select" onchange="onMusicaSelectChange(this, 'himnos')">
+            <option value="">-- Seleccione Himno de Arma / Cuerpo --</option>
+            <option value="mm_himnoartilleria">Himno de Artillería</option>
+            <option value="mm_himnocaballeria">Himno de Caballería</option>
+            <option value="mm_himnoinfanteria">Himno de Infantería</option>
+            <option value="mm_himnoinfmarina">Himno de Infantería de Marina</option>
+            <option value="mm_himnoingenieros">Himno de Ingenieros</option>
+            <option value="mm_himnoarmada">Himno de la Armada</option>
+            <option value="mm_himnobripac">Himno de la BRIPAC</option>
+            <option value="mm_himnoguardiacivil">Himno de la Guardia Civil</option>
+            <option value="mm_himnoguardiareal">Himno de la Guardia Real</option>
+            <option value="mm_himnolegion">Himno de la Legión</option>
+            <option value="mm_himnoume">Himno de la UME</option>
+            <option value="mm_himnoejercitoaireespacio">Himno del Ejército del Aire y del Espacio</option>
+            <option value="mm_legionariosdelaire">Legionarios del aire</option>
+        </select>
+      </div>
+
+      <!-- Desplegable 4: Música Religiosa Militar -->
+      <div class="field-group">
+        <label class="field-label" for="selCatReligiosa">✝️ 4. Música Religiosa Militar (5)</label>
+        <select id="selCatReligiosa" class="custom-select" onchange="onMusicaSelectChange(this, 'religiosa')">
+            <option value="">-- Seleccione Música Religiosa --</option>
+            <option value="mm_lamuertenoeselfinal">La muerte no es el final</option>
+            <option value="mm_noviodelamuerte">Novio de la muerte</option>
+            <option value="mm_oracion">Oracion</option>
+            <option value="mm_oraciondelanoche">Oracion de la Noche</option>
+            <option value="mm_salvemarinera">Salve Marinera</option>
+        </select>
+      </div>
+
+      <!-- BOTONERA COMÚN UNIFICADA -->
+      <div class="common-btn-bar">
+        <button type="button" id="btnPlayBandaCommon" class="btn-action-main btn-play-banda" onclick="playMusicaSeleccionadaMMT()">
+          <span>▶️</span> <span>PLAY</span>
+        </button>
+        <button type="button" id="btnAddBandaCommon" class="btn-action-main btn-add-banda" onclick="addMusicaSeleccionadaAPlaylistMMT()">
+          <span>➕</span> <span>AÑADIR A LISTA</span>
+        </button>
+        <button type="button" id="btnLyricsBandaCommon" class="btn-action-main btn-lyrics-banda" onclick="verLetraMusicaSeleccionadaMMT()">
+          <span>📜</span> <span>VER LETRA</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BLOQUE 2: TOQUES DE CORNETA -->
+    <div class="card card-block-2">
+      <div class="card-title">
+        <span>📯 CORNETA:</span>
+        </div>
+
+      <div class="field-group">
+        <label class="field-label" for="selCorneta">Toques Reglamentarios de Ordenanza</label>
+        <select id="selCorneta" class="custom-select">
+            <option value="">-- Seleccione Toque de Corneta --</option>
+            <option value="co_alto">Alto</option>
+            <option value="co_armen">Armen armas</option>
+            <option value="co_atencion">Atencion</option>
+            <option value="co_cambiodehombro">Cambio De Hombro</option>
+            <option value="co_cubrirse">Cubrirse</option>
+            <option value="co_defrente">De frente</option>
+            <option value="co_defrentepasofunerala">De frente Paso Funerala</option>
+            <option value="co_defrentepasoligero">De frente Paso Ligero</option>
+            <option value="co_derecha">Derecha</option>
+            <option value="co_descanso">Descanso</option>
+            <option value="co_diana">Diana</option>
+            <option value="co_discreccion">Discreccion</option>
+            <option value="co_findiscreccion">Fin Discreccion</option>
+            <option value="co_firmes">Firmes</option>
+            <option value="co_firmesautoridadprincipal">Firmes Autoridad Principal</option>
+            <option value="co_himnomacional">Himno Nacional a Corneta</option>
+            <option value="co_izquierda">Izquierda</option>
+            <option value="co_llamadageneral">Llamada General</option>
+            <option value="co_llamadamandos">Llamada Mandos</option>
+            <option value="co_mediavueltaar">Media Vuelta Ar</option>
+            <option value="co_presentenarmas">Presenten armas</option>
+            <option value="co_retreta">Retreta</option>
+            <option value="co_sobreelhombro">Sobre El Hombro</option>
+            <option value="co_sobreelhombroderecho">Sobre El Hombro Derecho</option>
+            <option value="co_oracioncorneta">Toque de Oración</option>
+        </select>
+      </div>
+
+      <!-- BOTONES DEBAJO DE LA BARRA DE CORNETA -->
+      <div class="corneta-btn-bar">
+        <button type="button" class="btn-action-main btn-play-corneta" onclick="playCornetaSeleccionadaMMT()">
+          <span>▶️</span> <span>TOCAR CORNETA</span>
+        </button>
+        <button type="button" class="btn-action-main btn-add-corneta" onclick="addCornetaSeleccionadaAPlaylistMMT()">
+          <span>➕</span> <span>AÑADIR A LISTA</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BLOQUE 3: LISTAS DE REPRODUCCIÓN -->
+    <div class="card card-block-3">
+      <div class="card-title">
+        <span>📋 Lista de reproducción</span>
+        </div>
+
+      <!-- Desplegable de lista existente -->
+      <div class="field-group" style="margin-bottom: 8px;">
+        <select id="selPlaylistActiva" class="custom-select" onchange="cambiarPlaylistActivaMMT(this.value)">
+          <option value="lista_ejemplo" selected>🎖️ LISTA EJEMPLO</option>
+        </select>
+      </div>
+
+      <!-- Barra de gestión de lista (Nueva, Guardar cambios, Borrar) -->
+      <div class="playlist-mgmt-bar" style="display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 8px; margin-bottom: 12px;">
+        <button type="button" class="btn-action-main btn-play-banda" onclick="crearNuevaListaPromptMMT()">
+          <span>➕</span> <span>Nueva Lista</span>
+        </button>
+        <button type="button" class="btn-action-main btn-play-banda" onclick="guardarListaActualMMT()">
+          <span>💾</span> <span>Guardar cambios</span>
+        </button>
+        <button type="button" class="btn-action-main btn-danger-action" onclick="borrarListaActualPromptMMT()"><span>🗑️</span> <span>Borrar Lista</span></button>
+      </div>
+
+      <!-- Ventana con las pistas de la lista -->
+      <div class="playlist-window" id="playlistWindowContainer">
+        <!-- Render dinámico de pistas con selección -->
+      </div>
+
+      <!-- Barra de reordenación y borrado de pista seleccionada -->
+      <div class="playlist-reorder-bar">
+        <button type="button" class="btn-reorder" onclick="subirPistaSeleccionadaMMT()">🔼 Subir</button>
+        <button type="button" class="btn-reorder" onclick="bajarPistaSeleccionadaMMT()">🔽 Bajar</button>
+        <button type="button" class="btn-del-item btn-danger-action" onclick="borrarPistaSeleccionadaMMT()">🗑️ Borrar Pista</button>
+      </div>
+
+      <!-- Barra de reproducción -->
+      <div class="playlist-exec-bar" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px;">
+        <button type="button" id="btnPlayPlaylist" class="btn-action-main btn-play-banda" onclick="iniciarPlaylistMMT()">
+          <span>▶️</span> <span>INICIAR</span>
+        </button>
+        <button type="button" class="btn-action-main btn-play-banda" onclick="saltarSiguientePistaPlaylistMMT()">
+          <span>⏭️</span> <span>NEXT</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DE LETRA DE CANCIONES -->
+  <div id="lyricsModal" class="modal-overlay" onclick="cerrarLyricsModalMMT(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div id="modalLyricsTitle" class="modal-title">Letra de la Canción</div>
+        <button type="button" class="modal-close-btn" onclick="cerrarLyricsModalMMT()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="modalLyricsAuthor" class="modal-author"></div>
+        <div id="modalLyricsText"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="background: transparent; border-top: none; text-align: center; margin-top: 20px; padding: 12px; color: #64748b; font-family: monospace; font-size: 11px; font-weight: normal;">
+      <div style="font-weight: 700; color: #94a3b8; margin-bottom: 2px;">@TDF 2026</div>
       <div style="font-size: 12px; font-weight: 600; color: #94a3b8; margin: 4px 0;">alavante.usuarios@gmail.com</div>
       <div style="color: #38bdf8; font-weight: 600;">v4.3.0012</div>
     </footer>
-  </div>
-<script>
-const PACK_MODULOS = ["izado_base", "CHIFLE_VIRTUAL_PWA", "Honores_buques", "honores_autoridades", "musica_militar"];
-let packOcupado = false;
-function packTxt(t){ var e=document.getElementById('packEstado'); if(e) e.textContent=t; }
-function packBar(p){ var b=document.getElementById('packBarra'); if(b) b.style.width=Math.max(0,Math.min(100,p))+'%'; }
-function esperar(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
-async function bajarFichero(cache, url){
-  var intentos=7;
-  for (var i=0;i<intentos;i++){
-    if (!navigator.onLine){ await esperar(3000); continue; }
-    var ctl=new AbortController();
-    var t=setTimeout(function(){ ctl.abort(); },90000);
-    try{
-      var same = new URL(url,location.href).origin===location.origin;
-      var r=await fetch(url,{signal:ctl.signal,cache:'reload',mode:same?'same-origin':'cors'});
-      if(!r.ok) throw new Error('http '+r.status);
-      var buf=await r.clone().arrayBuffer();
-      var esperado=parseInt(r.headers.get('content-length')||'0',10);
-      if(esperado && buf.byteLength!==esperado) throw new Error('incompleto');
-      await cache.put(url,new Response(buf,{status:200,headers:r.headers}));
-      clearTimeout(t); return true;
-    }catch(e){ clearTimeout(t); await esperar(Math.min(30000,1500*Math.pow(2,i))); }
-  }
-  return false;
-}
-async function instalarPackIAB(forzar){
-  if(packOcupado) return;
-  if(!('serviceWorker' in navigator) || !window.caches){ packTxt('Este navegador no admite uso sin conexión'); return; }
-  packOcupado=true;
-  var btn=document.getElementById('packBtn'); if(btn) btn.disabled=true;
-  try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(_){}
-  try{
-    var listas=[], total=0;
-    packTxt('Preparando lista de ficheros…');
-    for (var i=0;i<PACK_MODULOS.length;i++){
-      var m=PACK_MODULOS[i];
-      var base=new URL('../'+m+'/',location.href);
-      var r=await fetch(new URL('pack.json',base),{cache:'reload'});
-      if(!r.ok) throw new Error('pack.json '+m);
-      var pj=await r.json();
-      var cache=await caches.open(pj.cache);
-      var pend=[];
-      for (var k=0;k<pj.files.length;k++){
-        var f=pj.files[k]; var url=new URL(f.u,base).href;
-        total+=f.s||0;
-        if(!(await cache.match(url,{ignoreVary:true}))) pend.push({url:url,s:f.s||0});
-      }
-      listas.push({m:m,cache:cache,pend:pend,base:base});
-    }
-    var pendTotal=0; listas.forEach(function(l){ l.pend.forEach(function(x){ pendTotal+=x.s; }); });
-    var hecho=0, fallos=0, ficheros=0;
-    var totalFich=listas.reduce(function(a,l){ return a+l.pend.length; },0);
-    if(totalFich===0){ packTxt('✔ Pack completo, listo para uso sin conexión'); packBar(100); localStorage.setItem('packIAB','ok'); }
-    else{
-      for (var a=0;a<listas.length;a++){
-        var L=listas[a];
-        for (var b=0;b<L.pend.length;b++){
-          var it=L.pend[b];
-          packTxt('Descargando '+L.m.replace(/_/g,' ')+' · '+(ficheros+1)+'/'+totalFich+' · '+(hecho/1048576).toFixed(1)+' de '+(pendTotal/1048576).toFixed(1)+' MB');
-          var ok=await bajarFichero(L.cache,it.url);
-          if(ok){ hecho+=it.s; } else { fallos++; }
-          ficheros++;
-          packBar(pendTotal? hecho/pendTotal*100 : ficheros/totalFich*100);
+
+  <!-- CANALES DE AUDIO DUAL TOTALMENTE INDEPENDIENTES -->
+  <audio id="audioBandaMMT" preload="auto" playsinline></audio>
+  <audio id="audioCornetaMMT" preload="auto" playsinline></audio>
+
+  <script>
+    const APP_VERSION = 'v1792961372';
+
+    // ==========================================
+    // BASES DE DATOS TOTALES CON PAÍSES
+    // ==========================================
+    const TODAS_MUSICAS = [{"id": "mm_espaniacorto", "nombre": "Himno Nacional de España (Breve)", "archivo": "audio/Espania_corto.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Espania_corto.mp3", "letraId": null}, {"id": "mm_espanialargo", "nombre": "Himno Nacional de España (Completo)", "archivo": "audio/Espania_largo.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Espania_largo.mp3", "letraId": null}, {"id": "ant_afghanistan", "nombre": "Afghanistan", "archivo": "audio/anthems/Afghanistan.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Afghanistan.mp3", "letraId": null}, {"id": "ant_albania", "nombre": "Albania", "archivo": "audio/anthems/Albania.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Albania.mp3", "letraId": null}, {"id": "ant_alemania", "nombre": "Alemania (Das Lied der Deutschen)", "archivo": "audio/anthems/Alemania.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Alemania.mp3", "letraId": null}, {"id": "ant_angola", "nombre": "Angola", "archivo": "audio/anthems/Angola.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Angola.mp3", "letraId": null}, {"id": "ant_antiguabarbuda", "nombre": "Antigua Barbuda", "archivo": "audio/anthems/Antigua_Barbuda.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Antigua_Barbuda.mp3", "letraId": null}, {"id": "ant_antillasholandesas", "nombre": "Antillas Holandesas", "archivo": "audio/anthems/Antillas_Holandesas.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Antillas_Holandesas.mp3", "letraId": null}, {"id": "ant_arabiasaudita", "nombre": "Arabia Saudita", "archivo": "audio/anthems/Arabia_Saudita.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Arabia_Saudita.mp3", "letraId": null}, {"id": "ant_argelia", "nombre": "Argelia", "archivo": "audio/anthems/Argelia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Argelia.mp3", "letraId": null}, {"id": "ant_argentina", "nombre": "Argentina", "archivo": "audio/anthems/Argentina.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Argentina.mp3", "letraId": null}, {"id": "ant_armenia", "nombre": "Armenia", "archivo": "audio/anthems/Armenia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Armenia.mp3", "letraId": null}, {"id": "ant_aruba", "nombre": "Aruba", "archivo": "audio/anthems/Aruba.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Aruba.mp3", "letraId": null}, {"id": "ant_australia", "nombre": "Australia", "archivo": "audio/anthems/Australia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Australia.mp3", "letraId": null}, {"id": "ant_austria", "nombre": "Austria", "archivo": "audio/anthems/Austria.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Austria.mp3", "letraId": null}, {"id": "ant_azerbaiyan", "nombre": "Azerbaiyan", "archivo": "audio/anthems/Azerbaiyan.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Azerbaiyan.mp3", "letraId": null}, {"id": "ant_bahamas", "nombre": "Bahamas", "archivo": "audio/anthems/Bahamas.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Bahamas.mp3", "letraId": null}, {"id": "ant_bahrein", "nombre": "Bahrein", "archivo": "audio/anthems/Bahrein.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Bahrein.mp3", "letraId": null}, {"id": "ant_banglades", "nombre": "Banglades", "archivo": "audio/anthems/Banglades.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Banglades.mp3", "letraId": null}, {"id": "ant_barbados", "nombre": "Barbados", "archivo": "audio/anthems/Barbados.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Barbados.mp3", "letraId": null}, {"id": "ant_belgica", "nombre": "Belgica", "archivo": "audio/anthems/Belgica.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Belgica.mp3", "letraId": null}, {"id": "ant_belice", "nombre": "Belice", "archivo": "audio/anthems/Belice.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Belice.mp3", "letraId": null}, {"id": "ant_benin", "nombre": "Benin", "archivo": "audio/anthems/Benin.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Benin.mp3", "letraId": null}, {"id": "ant_bielorusia", "nombre": "Bielorusia", "archivo": "audio/anthems/Bielorusia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Bielorusia.mp3", "letraId": null}, {"id": "ant_bolivia", "nombre": "Bolivia", "archivo": "audio/anthems/Bolivia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Bolivia.mp3", "letraId": null}, {"id": "ant_bosniah", "nombre": "Bosnia y Herzegovina", "archivo": "audio/anthems/Bosnia_H.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Bosnia_H.mp3", "letraId": null}, {"id": "ant_botsuana", "nombre": "Botsuana", "archivo": "audio/anthems/Botsuana.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Botsuana.mp3", "letraId": null}, {"id": "ant_brasil", "nombre": "Brasil", "archivo": "audio/anthems/Brasil.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Brasil.mp3", "letraId": null}, {"id": "ant_brunei", "nombre": "Brunei", "archivo": "audio/anthems/Brunei.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Brunei.mp3", "letraId": null}, {"id": "ant_bulgaria", "nombre": "Bulgaria", "archivo": "audio/anthems/Bulgaria.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Bulgaria.mp3", "letraId": null}, {"id": "ant_caboverde", "nombre": "Cabo Verde", "archivo": "audio/anthems/Cabo_Verde.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Cabo_Verde.mp3", "letraId": null}, {"id": "ant_camboya", "nombre": "Camboya", "archivo": "audio/anthems/Camboya.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Camboya.mp3", "letraId": null}, {"id": "ant_camerun", "nombre": "Camerun", "archivo": "audio/anthems/Camerun.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Camerun.mp3", "letraId": null}, {"id": "ant_canada", "nombre": "Canada", "archivo": "audio/anthems/Canada.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Canada.mp3", "letraId": null}, {"id": "ant_chad", "nombre": "Chad", "archivo": "audio/anthems/Chad.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Chad.mp3", "letraId": null}, {"id": "ant_chile", "nombre": "Chile", "archivo": "audio/anthems/Chile.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Chile.mp3", "letraId": null}, {"id": "ant_china", "nombre": "China", "archivo": "audio/anthems/China.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/China.mp3", "letraId": null}, {"id": "ant_colombia", "nombre": "Colombia", "archivo": "audio/anthems/Colombia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Colombia.mp3", "letraId": null}, {"id": "ant_congo", "nombre": "Congo", "archivo": "audio/anthems/Congo.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Congo.mp3", "letraId": null}, {"id": "ant_coreasur", "nombre": "Corea del Sur", "archivo": "audio/anthems/Corea_Sur.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Corea_Sur.mp3", "letraId": null}, {"id": "ant_costamarfil", "nombre": "Costa Marfil", "archivo": "audio/anthems/Costa_Marfil.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Costa_Marfil.mp3", "letraId": null}, {"id": "ant_costarica", "nombre": "Costa Rica", "archivo": "audio/anthems/Costa_Rica.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Costa_Rica.mp3", "letraId": null}, {"id": "ant_croacia", "nombre": "Croacia", "archivo": "audio/anthems/Croacia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Croacia.mp3", "letraId": null}, {"id": "ant_cuba", "nombre": "Cuba", "archivo": "audio/anthems/Cuba.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Cuba.mp3", "letraId": null}, {"id": "ant_dinamarca", "nombre": "Dinamarca", "archivo": "audio/anthems/Dinamarca.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Dinamarca.mp3", "letraId": null}, {"id": "ant_dinamarcamr", "nombre": "Dinamarca (Marcha Real)", "archivo": "audio/anthems/Dinamarca_MR.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Dinamarca_MR.mp3", "letraId": null}, {"id": "ant_dominica", "nombre": "Dominica", "archivo": "audio/anthems/Dominica.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Dominica.mp3", "letraId": null}, {"id": "ant_eu", "nombre": "EU", "archivo": "audio/anthems/EU.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/EU.mp3", "letraId": null}, {"id": "ant_ecuador", "nombre": "Ecuador", "archivo": "audio/anthems/Ecuador.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Ecuador.mp3", "letraId": null}, {"id": "ant_egipto", "nombre": "Egipto", "archivo": "audio/anthems/Egipto.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Egipto.mp3", "letraId": null}, {"id": "ant_emiratos", "nombre": "Emiratos", "archivo": "audio/anthems/Emiratos.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Emiratos.mp3", "letraId": null}, {"id": "ant_eritrea", "nombre": "Eritrea", "archivo": "audio/anthems/Eritrea.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Eritrea.mp3", "letraId": null}, {"id": "ant_eslovaquia", "nombre": "Eslovaquia", "archivo": "audio/anthems/Eslovaquia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Eslovaquia.mp3", "letraId": null}, {"id": "ant_eslovenia", "nombre": "Eslovenia", "archivo": "audio/anthems/Eslovenia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Eslovenia.mp3", "letraId": null}, {"id": "ant_eeuu", "nombre": "Estados Unidos (EE.UU.)", "archivo": "audio/anthems/EEUU.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/EEUU.mp3", "letraId": null}, {"id": "ant_estonia", "nombre": "Estonia", "archivo": "audio/anthems/Estonia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Estonia.mp3", "letraId": null}, {"id": "ant_filipinas", "nombre": "Filipinas", "archivo": "audio/anthems/Filipinas.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Filipinas.mp3", "letraId": null}, {"id": "ant_finlandia", "nombre": "Finlandia", "archivo": "audio/anthems/Finlandia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Finlandia.mp3", "letraId": null}, {"id": "ant_francia", "nombre": "Francia (La Marsellesa)", "archivo": "audio/anthems/Francia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Francia.mp3", "letraId": null}, {"id": "ant_gabon", "nombre": "Gabon", "archivo": "audio/anthems/Gabon.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Gabon.mp3", "letraId": null}, {"id": "ant_gambia", "nombre": "Gambia", "archivo": "audio/anthems/Gambia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Gambia.mp3", "letraId": null}, {"id": "ant_georgia", "nombre": "Georgia", "archivo": "audio/anthems/Georgia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Georgia.mp3", "letraId": null}, {"id": "ant_ghana", "nombre": "Ghana", "archivo": "audio/anthems/Ghana.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Ghana.mp3", "letraId": null}, {"id": "ant_grecia", "nombre": "Grecia", "archivo": "audio/anthems/Grecia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Grecia.mp3", "letraId": null}, {"id": "ant_guatemala", "nombre": "Guatemala", "archivo": "audio/anthems/Guatemala.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Guatemala.mp3", "letraId": null}, {"id": "ant_guayana", "nombre": "Guayana", "archivo": "audio/anthems/Guayana.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Guayana.mp3", "letraId": null}, {"id": "ant_guinea", "nombre": "Guinea", "archivo": "audio/anthems/Guinea.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Guinea.mp3", "letraId": null}, {"id": "ant_guineabissau", "nombre": "Guinea Bissau", "archivo": "audio/anthems/Guinea_Bissau.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Guinea_Bissau.mp3", "letraId": null}, {"id": "ant_guineaecuatorial", "nombre": "Guinea Ecuatorial", "archivo": "audio/anthems/Guinea_Ecuatorial.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Guinea_Ecuatorial.mp3", "letraId": null}, {"id": "ant_haiti", "nombre": "Haiti", "archivo": "audio/anthems/Haiti.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Haiti.mp3", "letraId": null}, {"id": "ant_honduras", "nombre": "Honduras", "archivo": "audio/anthems/Honduras.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Honduras.mp3", "letraId": null}, {"id": "ant_hungria", "nombre": "Hungria", "archivo": "audio/anthems/Hungria.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Hungria.mp3", "letraId": null}, {"id": "ant_india", "nombre": "India", "archivo": "audio/anthems/India.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/India.mp3", "letraId": null}, {"id": "ant_indonesia", "nombre": "Indonesia", "archivo": "audio/anthems/Indonesia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Indonesia.mp3", "letraId": null}, {"id": "ant_irak", "nombre": "Irak", "archivo": "audio/anthems/Irak.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Irak.mp3", "letraId": null}, {"id": "ant_irlanda", "nombre": "Irlanda", "archivo": "audio/anthems/Irlanda.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Irlanda.mp3", "letraId": null}, {"id": "ant_islandia", "nombre": "Islandia", "archivo": "audio/anthems/Islandia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Islandia.mp3", "letraId": null}, {"id": "ant_israel", "nombre": "Israel", "archivo": "audio/anthems/Israel.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Israel.mp3", "letraId": null}, {"id": "ant_italia", "nombre": "Italia (Fratelli d'Italia)", "archivo": "audio/anthems/Italia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Italia.mp3", "letraId": null}, {"id": "ant_jamaica", "nombre": "Jamaica", "archivo": "audio/anthems/Jamaica.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Jamaica.mp3", "letraId": null}, {"id": "ant_japon", "nombre": "Japon", "archivo": "audio/anthems/Japon.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Japon.mp3", "letraId": null}, {"id": "ant_jordania", "nombre": "Jordania", "archivo": "audio/anthems/Jordania.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Jordania.mp3", "letraId": null}, {"id": "ant_kazajistan", "nombre": "Kazajistan", "archivo": "audio/anthems/Kazajistan.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Kazajistan.mp3", "letraId": null}, {"id": "ant_kenia", "nombre": "Kenia", "archivo": "audio/anthems/Kenia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Kenia.mp3", "letraId": null}, {"id": "ant_kuwait", "nombre": "Kuwait", "archivo": "audio/anthems/Kuwait.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Kuwait.mp3", "letraId": null}, {"id": "ant_laos", "nombre": "Laos", "archivo": "audio/anthems/Laos.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Laos.mp3", "letraId": null}, {"id": "ant_lesoto", "nombre": "Lesoto", "archivo": "audio/anthems/Lesoto.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Lesoto.mp3", "letraId": null}, {"id": "ant_letonia", "nombre": "Letonia", "archivo": "audio/anthems/Letonia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Letonia.mp3", "letraId": null}, {"id": "ant_libano", "nombre": "Libano", "archivo": "audio/anthems/Libano.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Libano.mp3", "letraId": null}, {"id": "ant_liberia", "nombre": "Liberia", "archivo": "audio/anthems/Liberia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Liberia.mp3", "letraId": null}, {"id": "ant_libia", "nombre": "Libia", "archivo": "audio/anthems/Libia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Libia.mp3", "letraId": null}, {"id": "ant_liechtenstein", "nombre": "Liechtenstein", "archivo": "audio/anthems/Liechtenstein.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Liechtenstein.mp3", "letraId": null}, {"id": "ant_lituania", "nombre": "Lituania", "archivo": "audio/anthems/Lituania.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Lituania.mp3", "letraId": null}, {"id": "ant_luxemburgo", "nombre": "Luxemburgo", "archivo": "audio/anthems/Luxemburgo.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Luxemburgo.mp3", "letraId": null}, {"id": "ant_macedonia", "nombre": "Macedonia", "archivo": "audio/anthems/Macedonia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Macedonia.mp3", "letraId": null}, {"id": "ant_madagascar", "nombre": "Madagascar", "archivo": "audio/anthems/Madagascar.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Madagascar.mp3", "letraId": null}, {"id": "ant_malasia", "nombre": "Malasia", "archivo": "audio/anthems/Malasia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Malasia.mp3", "letraId": null}, {"id": "ant_maldivas", "nombre": "Maldivas", "archivo": "audio/anthems/Maldivas.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Maldivas.mp3", "letraId": null}, {"id": "ant_mali", "nombre": "Mali", "archivo": "audio/anthems/Mali.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Mali.mp3", "letraId": null}, {"id": "ant_malta", "nombre": "Malta", "archivo": "audio/anthems/Malta.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Malta.mp3", "letraId": null}, {"id": "ant_marruecos", "nombre": "Marruecos", "archivo": "audio/anthems/Marruecos.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Marruecos.mp3", "letraId": null}, {"id": "ant_mauricio", "nombre": "Mauricio", "archivo": "audio/anthems/Mauricio.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Mauricio.mp3", "letraId": null}, {"id": "ant_mauritania", "nombre": "Mauritania", "archivo": "audio/anthems/Mauritania.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Mauritania.mp3", "letraId": null}, {"id": "ant_mejico", "nombre": "Mejico", "archivo": "audio/anthems/Mejico.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Mejico.mp3", "letraId": null}, {"id": "ant_moldavia", "nombre": "Moldavia", "archivo": "audio/anthems/Moldavia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Moldavia.mp3", "letraId": null}, {"id": "ant_monaco", "nombre": "Monaco", "archivo": "audio/anthems/Monaco.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Monaco.mp3", "letraId": null}, {"id": "ant_montenegro", "nombre": "Montenegro", "archivo": "audio/anthems/Montenegro.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Montenegro.mp3", "letraId": null}, {"id": "ant_mozambique", "nombre": "Mozambique", "archivo": "audio/anthems/Mozambique.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Mozambique.mp3", "letraId": null}, {"id": "ant_myanmar", "nombre": "Myanmar", "archivo": "audio/anthems/Myanmar.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Myanmar.mp3", "letraId": null}, {"id": "ant_namibia", "nombre": "Namibia", "archivo": "audio/anthems/Namibia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Namibia.mp3", "letraId": null}, {"id": "ant_nepal", "nombre": "Nepal", "archivo": "audio/anthems/Nepal.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Nepal.mp3", "letraId": null}, {"id": "ant_nicaragua", "nombre": "Nicaragua", "archivo": "audio/anthems/Nicaragua.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Nicaragua.mp3", "letraId": null}, {"id": "ant_noruega", "nombre": "Noruega", "archivo": "audio/anthems/Noruega.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Noruega.mp3", "letraId": null}, {"id": "ant_nuevazelanda", "nombre": "Nueva Zelanda", "archivo": "audio/anthems/Nueva_Zelanda.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Nueva_Zelanda.mp3", "letraId": null}, {"id": "ant_otan", "nombre": "OTAN / NATO", "archivo": "audio/anthems/OTAN.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/OTAN.mp3", "letraId": null}, {"id": "ant_oman", "nombre": "Oman", "archivo": "audio/anthems/Oman.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Oman.mp3", "letraId": null}, {"id": "ant_pakistan", "nombre": "Pakistan", "archivo": "audio/anthems/Pakistan.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Pakistan.mp3", "letraId": null}, {"id": "ant_panama", "nombre": "Panama", "archivo": "audio/anthems/Panama.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Panama.mp3", "letraId": null}, {"id": "ant_paisesbajos", "nombre": "Países Bajos", "archivo": "audio/anthems/Paises_Bajos.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Paises_Bajos.mp3", "letraId": null}, {"id": "ant_peru", "nombre": "Peru", "archivo": "audio/anthems/Peru.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Peru.mp3", "letraId": null}, {"id": "ant_polonia", "nombre": "Polonia", "archivo": "audio/anthems/Polonia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Polonia.mp3", "letraId": null}, {"id": "ant_portugal", "nombre": "Portugal", "archivo": "audio/anthems/Portugal.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Portugal.mp3", "letraId": null}, {"id": "ant_puertorico", "nombre": "Puerto Rico", "archivo": "audio/anthems/Puerto_Rico.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Puerto_Rico.mp3", "letraId": null}, {"id": "ant_qatar", "nombre": "Qatar", "archivo": "audio/anthems/Qatar.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Qatar.mp3", "letraId": null}, {"id": "ant_reinounido", "nombre": "Reino Unido (God Save the King)", "archivo": "audio/anthems/Reino_Unido.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Reino_Unido.mp3", "letraId": null}, {"id": "ant_republicadominicana", "nombre": "Republica Dominicana", "archivo": "audio/anthems/Republica_Dominicana.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Republica_Dominicana.mp3", "letraId": null}, {"id": "ant_rcafricana", "nombre": "República Centroafricana", "archivo": "audio/anthems/RC_Africana.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/RC_Africana.mp3", "letraId": null}, {"id": "ant_repcheca", "nombre": "República Checa", "archivo": "audio/anthems/Rep_Checa.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Rep_Checa.mp3", "letraId": null}, {"id": "ant_ruanda", "nombre": "Ruanda", "archivo": "audio/anthems/Ruanda.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Ruanda.mp3", "letraId": null}, {"id": "ant_rumania", "nombre": "Rumania", "archivo": "audio/anthems/Rumania.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Rumania.mp3", "letraId": null}, {"id": "ant_rusia", "nombre": "Rusia (Himno de la Federación Rusa)", "archivo": "audio/anthems/Rusia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Rusia.mp3", "letraId": null}, {"id": "ant_salvador", "nombre": "Salvador", "archivo": "audio/anthems/Salvador.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Salvador.mp3", "letraId": null}, {"id": "ant_serbia", "nombre": "Serbia", "archivo": "audio/anthems/Serbia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Serbia.mp3", "letraId": null}, {"id": "ant_seychelles", "nombre": "Seychelles", "archivo": "audio/anthems/Seychelles.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Seychelles.mp3", "letraId": null}, {"id": "ant_sierraleona", "nombre": "Sierra Leona", "archivo": "audio/anthems/Sierra_Leona.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Sierra_Leona.mp3", "letraId": null}, {"id": "ant_singapur", "nombre": "Singapur", "archivo": "audio/anthems/Singapur.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Singapur.mp3", "letraId": null}, {"id": "ant_sommalta", "nombre": "Soberana Orden de Malta", "archivo": "audio/anthems/SOM_Malta.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/SOM_Malta.mp3", "letraId": null}, {"id": "ant_somalia", "nombre": "Somalia", "archivo": "audio/anthems/Somalia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Somalia.mp3", "letraId": null}, {"id": "ant_srilanka", "nombre": "Sri Lanka", "archivo": "audio/anthems/Sri_Lanka.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Sri_Lanka.mp3", "letraId": null}, {"id": "ant_sudan", "nombre": "Sudan", "archivo": "audio/anthems/Sudan.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Sudan.mp3", "letraId": null}, {"id": "ant_suecia", "nombre": "Suecia", "archivo": "audio/anthems/Suecia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Suecia.mp3", "letraId": null}, {"id": "ant_suiza", "nombre": "Suiza", "archivo": "audio/anthems/Suiza.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Suiza.mp3", "letraId": null}, {"id": "ant_tanzania", "nombre": "Tanzania", "archivo": "audio/anthems/Tanzania.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Tanzania.mp3", "letraId": null}, {"id": "ant_timororiental", "nombre": "Timor Oriental", "archivo": "audio/anthems/Timor_Oriental.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Timor_Oriental.mp3", "letraId": null}, {"id": "ant_trinidadtobago", "nombre": "Trinidad Tobago", "archivo": "audio/anthems/Trinidad_Tobago.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Trinidad_Tobago.mp3", "letraId": null}, {"id": "ant_tunez", "nombre": "Tunez", "archivo": "audio/anthems/Tunez.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Tunez.mp3", "letraId": null}, {"id": "ant_turquia", "nombre": "Turquia", "archivo": "audio/anthems/Turquia.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Turquia.mp3", "letraId": null}, {"id": "ant_ucrania", "nombre": "Ucrania", "archivo": "audio/anthems/Ucrania.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Ucrania.mp3", "letraId": null}, {"id": "ant_uganda", "nombre": "Uganda", "archivo": "audio/anthems/Uganda.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Uganda.mp3", "letraId": null}, {"id": "ant_ue", "nombre": "Unión Europea (Himno de la Alegría)", "archivo": "audio/anthems/UE.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/UE.mp3", "letraId": null}, {"id": "ant_uruguay", "nombre": "Uruguay", "archivo": "audio/anthems/Uruguay.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Uruguay.mp3", "letraId": null}, {"id": "ant_vaticano", "nombre": "Vaticano", "archivo": "audio/anthems/Vaticano.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Vaticano.mp3", "letraId": null}, {"id": "ant_venezuela", "nombre": "Venezuela", "archivo": "audio/anthems/Venezuela.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Venezuela.mp3", "letraId": null}, {"id": "ant_yemen", "nombre": "Yemen", "archivo": "audio/anthems/Yemen.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Yemen.mp3", "letraId": null}, {"id": "ant_yibuti", "nombre": "Yibuti", "archivo": "audio/anthems/Yibuti.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/anthemsnew/main/Yibuti.mp3", "letraId": null}, {"id": "mm_bajoladobleaguila", "nombre": "Bajo La Doble Aguila", "archivo": "audio/Bajo La Doble Aguila.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Bajo%20La%20Doble%20Aguila.mp3", "letraId": null}, {"id": "mm_cantinera", "nombre": "Cantinera", "archivo": "audio/Cantinera.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Cantinera.mp3", "letraId": "cantinera"}, {"id": "mm_noviodelamuerte", "nombre": "El Novio de la Muerte", "archivo": "audio/Novio de la muerte.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Novio%20de%20la%20muerte.mp3", "letraId": "noviodelamuerte"}, {"id": "mm_elabanico", "nombre": "El abanico", "archivo": "audio/El abanico.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/El%20abanico.mp3", "letraId": null}, {"id": "mm_elturuta", "nombre": "El turuta", "archivo": "audio/El turuta.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/El%20turuta.mp3", "letraId": null}, {"id": "mm_elviejoalmirante", "nombre": "El viejo almirante", "archivo": "audio/El viejo almirante.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/El%20viejo%20almirante.mp3", "letraId": null}, {"id": "mm_ganandobarlovento", "nombre": "Ganando Barlovento", "archivo": "audio/Ganando Barlovento.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Ganando%20Barlovento.mp3", "letraId": null}, {"id": "mm_heroina", "nombre": "Heroina", "archivo": "audio/Heroina.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Heroina.mp3", "letraId": null}, {"id": "mm_laorgiadorada", "nombre": "La Orgia Dorada", "archivo": "audio/La Orgia Dorada.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/La%20Orgia%20Dorada.mp3", "letraId": null}, {"id": "mm_laguardiadealabarderos", "nombre": "La guardia de alabarderos", "archivo": "audio/La guardia de alabarderos.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/La%20guardia%20de%20alabarderos.mp3", "letraId": null}, {"id": "mm_lavueltadelosvoluntarios", "nombre": "La vuelta de los voluntarios", "archivo": "audio/La vuelta de los voluntarios.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/La%20vuelta%20de%20los%20voluntarios.mp3", "letraId": null}, {"id": "mm_lascorsarias", "nombre": "Las corsarias", "archivo": "audio/Las corsarias.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Las%20corsarias.mp3", "letraId": "lascorsarias"}, {"id": "mm_losgenerales", "nombre": "Los Generales", "archivo": "audio/Los Generales.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Los%20Generales.mp3", "letraId": null}, {"id": "mm_losquintos", "nombre": "Los Quintos", "archivo": "audio/Los Quintos.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Los%20Quintos.mp3", "letraId": null}, {"id": "mm_marchadeinfantes", "nombre": "Marcha de infantes", "archivo": "audio/Marcha de infantes.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Marcha%20de%20infantes.mp3", "letraId": null}, {"id": "mm_maresyvientos", "nombre": "Mares y vientos", "archivo": "audio/Mares y vientos.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Mares%20y%20vientos.mp3", "letraId": null}, {"id": "mm_pasoligero", "nombre": "Paso ligero", "archivo": "audio/Paso ligero.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Paso%20ligero.mp3", "letraId": null}, {"id": "mm_proaalamar", "nombre": "Proa a la mar", "archivo": "audio/Proa a la mar.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Proa%20a%20la%20mar.mp3", "letraId": null}, {"id": "mm_sanmarcial", "nombre": "San Marcial", "archivo": "audio/San Marcial.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/San%20Marcial.mp3", "letraId": null}, {"id": "mm_sanquintin", "nombre": "San Quintin", "archivo": "audio/San Quintin.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/San%20Quintin.mp3", "letraId": null}, {"id": "mm_vuelostriunfales", "nombre": "Vuelos triunfales", "archivo": "audio/Vuelos triunfales.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Vuelos%20triunfales.mp3", "letraId": null}, {"id": "mm_himnoarmada", "nombre": "Himno de la Armada", "archivo": "audio/Himno ARMADA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20ARMADA.mp3", "letraId": null}, {"id": "mm_himnoartilleria", "nombre": "Himno de Artillería", "archivo": "audio/Himno ARTILLERIA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20ARTILLERIA.mp3", "letraId": null}, {"id": "mm_himnobripac", "nombre": "Himno de la BRIPAC", "archivo": "audio/Himno BRIPAC.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20BRIPAC.mp3", "letraId": null}, {"id": "mm_himnocaballeria", "nombre": "Himno de Caballería", "archivo": "audio/Himno CABALLERIA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20CABALLERIA.mp3", "letraId": null}, {"id": "mm_himnoejercitoaireespacio", "nombre": "Himno del Ejército del Aire y del Espacio", "archivo": "audio/Himno EJERCITO AIRE ESPACIO.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20EJERCITO%20AIRE%20ESPACIO.mp3", "letraId": null}, {"id": "mm_himnoguardiacivil", "nombre": "Himno de la Guardia Civil", "archivo": "audio/Himno GUARDIA CIVIL.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20GUARDIA%20CIVIL.mp3", "letraId": null}, {"id": "mm_himnoguardiareal", "nombre": "Himno de la Guardia Real", "archivo": "audio/Himno GUARDIA REAL.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20GUARDIA%20REAL.mp3", "letraId": null}, {"id": "mm_himnoinfmarina", "nombre": "Himno de Infantería de Marina", "archivo": "audio/Himno INF MARINA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20INF%20MARINA.mp3", "letraId": null}, {"id": "mm_himnoinfanteria", "nombre": "Himno de Infantería", "archivo": "audio/Himno INFANTERIA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20INFANTERIA.mp3", "letraId": null}, {"id": "mm_himnoingenieros", "nombre": "Himno de Ingenieros", "archivo": "audio/Himno INGENIEROS.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20INGENIEROS.mp3", "letraId": null}, {"id": "mm_himnolegion", "nombre": "Himno de la Legión", "archivo": "audio/Himno LEGION.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20LEGION.mp3", "letraId": null}, {"id": "mm_himnoume", "nombre": "Himno de la UME", "archivo": "audio/Himno UME.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Himno%20UME.mp3", "letraId": null}, {"id": "mm_legionariosdelaire", "nombre": "Legionarios del aire", "archivo": "audio/Legionarios del aire.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Legionarios%20del%20aire.mp3", "letraId": null}, {"id": "mm_lamuertenoeselfinal", "nombre": "La muerte no es el final", "archivo": "audio/La muerte no es el final.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/La%20muerte%20no%20es%20el%20final.mp3", "letraId": null}, {"id": "mm_noviodelamuerte", "nombre": "Novio de la muerte", "archivo": "audio/Novio de la muerte.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Novio%20de%20la%20muerte.mp3", "letraId": null}, {"id": "mm_oraciondelanoche", "nombre": "Oracion de la Noche", "archivo": "audio/Oracion de la Noche.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Oracion%20de%20la%20Noche.mp3", "letraId": "oracion_noche"}, {"id": "mm_oracion", "nombre": "Oracion", "archivo": "audio/Oracion.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Oracion.mp3", "letraId": "oracion_noche"}, {"id": "mm_salvemarinera", "nombre": "Salve Marinera", "archivo": "audio/Salve Marinera.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/musicamilitaresp/main/Salve%20Marinera.mp3", "letraId": "salve_marinera"}];
+    const CORNETAS_DB = [{"id": "co_alto", "nombre": "Alto", "archivo": "audio/ALTO.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/ALTO.mp3"}, {"id": "co_armen", "nombre": "Armen armas", "archivo": "audio/ARMEN.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/ARMEN.mp3"}, {"id": "co_atencion", "nombre": "Atencion", "archivo": "audio/ATENCION.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/ATENCION.mp3"}, {"id": "co_cambiodehombro", "nombre": "Cambio De Hombro", "archivo": "audio/CAMBIO DE HOMBRO.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/CAMBIO%20DE%20HOMBRO.mp3"}, {"id": "co_cubrirse", "nombre": "Cubrirse", "archivo": "audio/CUBRIRSE.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/CUBRIRSE.mp3"}, {"id": "co_defrentepasofunerala", "nombre": "De frente Paso Funerala", "archivo": "audio/DEFRENTE PASO FUNERALA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/DEFRENTE%20PASO%20FUNERALA.mp3"}, {"id": "co_defrentepasoligero", "nombre": "De frente Paso Ligero", "archivo": "audio/DEFRENTE PASO LIGERO.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/DEFRENTE%20PASO%20LIGERO.mp3"}, {"id": "co_defrente", "nombre": "De frente", "archivo": "audio/DEFRENTE.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/DEFRENTE.mp3"}, {"id": "co_derecha", "nombre": "Derecha", "archivo": "audio/DERECHA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/DERECHA.mp3"}, {"id": "co_descanso", "nombre": "Descanso", "archivo": "audio/DESCANSO.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/DESCANSO.mp3"}, {"id": "co_diana", "nombre": "Diana", "archivo": "audio/DIANA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/DIANA.mp3"}, {"id": "co_discreccion", "nombre": "Discreccion", "archivo": "audio/DISCRECCION.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/DISCRECCION.mp3"}, {"id": "co_findiscreccion", "nombre": "Fin Discreccion", "archivo": "audio/FIN_DISCRECCION.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/FIN_DISCRECCION.mp3"}, {"id": "co_firmesautoridadprincipal", "nombre": "Firmes Autoridad Principal", "archivo": "audio/FIRMES AUTORIDAD PRINCIPAL.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/FIRMES%20AUTORIDAD%20PRINCIPAL.mp3"}, {"id": "co_firmes", "nombre": "Firmes", "archivo": "audio/FIRMES.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/FIRMES.mp3"}, {"id": "co_himnomacional", "nombre": "Himno Nacional a Corneta", "archivo": "audio/HIMNOMACIONAL.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/HIMNOMACIONAL.mp3"}, {"id": "co_izquierda", "nombre": "Izquierda", "archivo": "audio/IZQUIERDA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/IZQUIERDA.mp3"}, {"id": "co_llamadageneral", "nombre": "Llamada General", "archivo": "audio/LLAMADA GENERAL.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/LLAMADA%20GENERAL.mp3"}, {"id": "co_llamadamandos", "nombre": "Llamada Mandos", "archivo": "audio/LLAMADA_MANDOS.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/LLAMADA_MANDOS.mp3"}, {"id": "co_mediavueltaar", "nombre": "Media Vuelta Ar", "archivo": "audio/MEDIA_VUELTA_AR.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/MEDIA_VUELTA_AR.mp3"}, {"id": "co_oracioncorneta", "nombre": "Toque de Oración", "archivo": "audio/ORACION_CORNETA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/ORACION_CORNETA.mp3"}, {"id": "co_presentenarmas", "nombre": "Presenten armas", "archivo": "audio/PRESENTEN_ARMAS.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/PRESENTEN_ARMAS.mp3"}, {"id": "co_retreta", "nombre": "Retreta", "archivo": "audio/RETRETA.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/RETRETA.mp3"}, {"id": "co_sobreelhombroderecho", "nombre": "Sobre El Hombro Derecho", "archivo": "audio/SOBRE EL HOMBRO DERECHO.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/SOBRE%20EL%20HOMBRO%20DERECHO.mp3"}, {"id": "co_sobreelhombro", "nombre": "Sobre El Hombro", "archivo": "audio/SOBRE EL HOMBRO.mp3", "urlRemota": "https://raw.githubusercontent.com/alavante/cornetas/main/SOBRE%20EL%20HOMBRO.mp3"}];
+    const LETRAS_DB = {"cantinera": {"title": "La Cantinera", "author": "", "text": "Hoy aquí en tierra\r\nmañana en la mar\r\nlistos a zarpar.\r\n\r\nEn paz o en guerra\r\nen calma o en tormenta\r\nhay que navegar.\r\n\r\nEcha cantinera\r\nvino para todos\r\nquién sabe si cualquiera\r\nde los que aquí estamos\r\nnunca volverá.\r\n\r\nEl ancla zarpó avante\r\nlas dos rumbo\r\nhacia alta mar.\r\n\r\nDime serviola\r\nsi aún en el muelle\r\na mi novia ves llorar.\r\n\r\nDéjala que llore\r\nqué me importa su llanto\r\nsi a pocas singladuras\r\ncuando atraquemos\r\notra encontrarás."}, "lascorsarias": {"title": "Las Corsarias (Banderita)", "author": "", "text": "Allá por la tierra mora,\r\nallá por tierra africana,\r\nun soldadito español,\r\nde esta manera cantaba:\r\n\r\nComo el fino de Jerez,\r\ny el tintillo de Rioja,\r\nson los colores que tiene\r\nla Banderita Española,\r\nla Banderita Española.\r\n\r\nCuando estoy en tierra extraña\r\ny contemplo tus colores\r\ny me acuerdo de mi España,\r\nmira si yo te querré.\r\n\r\nComo el fino de Jerez,\r\ny el tintillo de Rioja,\r\nson los colores que tiene\r\nla Banderita Española,\r\nla Banderita Española.\r\n\r\nBanderita tu eres roja,\r\nBanderita tu eres gualda,\r\nllevas sangre, llevas oro\r\nen el fondo de tu alma.\r\n\r\nY el día que yo me muera,\r\nsi estoy lejos de mi Patria\r\nsólo quiero que me cubran\r\ncon la Bandera de España.\r\n\r\nBanderita tu eres roja,\r\nBanderita tu eres gualda,\r\nllevas sangre, llevas oro\r\nen el fondo de tu alma.\r\n\r\nY el día que yo me muera,\r\nsi estoy lejos de mi Patria\r\n¡Sólo quiero que me cubran\r\ncon la Bandera de España!"}, "noviodelamuerte": {"title": "El Novio de la Muerte", "author": "", "text": "Nadie en el Tercio sabía\r\nquien era aquel legionario\r\ntan audaz y temerario\r\nque a la Legión se alistó.\r\n\r\nNadie sabía su historia\r\nmás la Legión suponía\r\nque un gran dolor le mordía\r\ncomo un lobo el corazón.\r\n\r\nMás si alguno quién era le preguntaba\r\ncon dolor y rureza le contestaba:\r\n\r\nSoy un hombre a quien la suerte\r\nhirió con zarpa de fiera\r\nsoy un novio de la muerte\r\nque va a unirse en lazo fuerte\r\ncon tan leal compañera.\r\n\r\nCuando más rudo era el fuego\r\ny la pelea más fiera\r\ndefendiendo su Bandera\r\nel legionario avanzó.\r\n\r\nY sin temer al empuje\r\ndel enemigo exaltado\r\nsupo morir como un bravo\r\ny la Enseña rescató.\r\n\r\nY al regar con su sangre la tierra ardiente\r\nmurmuró el legionario con voz doliente:\r\n\r\nSoy un hombre a quien la suerte\r\nhirió con zarpa de fiera\r\nsoy un novio de la muerte\r\nque va a unirse en lazo fuerte\r\ncon tan leal compañera.\r\n\r\nCuando al fin le recogieron\r\nentre su pecho encontraron\r\nuna carta y un retrato\r\nde una divina mujer.\r\n\r\nAquella carta decía:\r\n“Si algún día Dios te llama\r\npara mí un puesto reclama\r\nque a buscarte pronto iré.”\r\n\r\nY en el último verso que le enviaba,\r\nsu postrer despedida le consagraba:\r\n\r\n“Por ir a tu lado a verte,\r\nmi más leal compañera,\r\nme hice novio de la muerte,\r\nla estreché con lazo fuerte\r\n\r\ny su amor fue mi ¡Bandera!”"}, "oracion_noche": {"title": "Oración de la Noche", "author": "", "text": "Tú que dispones\r\nde viento y mar,\r\nhaces la calma,\r\nla tempestad.\r\nTen de nosotros Señor,\r\npiedad,\r\npiedad, Señor,\r\nSeñor, piedad."}, "salve_marinera": {"title": "Salve Marinera", "author": "", "text": "Salve Marinera\r\nSalve, Estrella de los mares,\r\nde los mares iris, de eterna ventura.\r\nSalve,  oh! F nix de hermosura\r\nMadre del divino amor.\r\n\r\nDe tu pueblo, a los pesares\r\ntu clemencia de consuelo.\r\nFervoroso llegue al cielo y hasta Ti,\r\ny hasta Ti, nuestro clamor.\r\n\r\nSalve, salve, Estrella de los mares.\r\nSalve, Estrella de los mares.\r\nS , fervoroso llegue al cielo, y hasta Ti,\r\ny hasta Ti, nuestro clamor.\r\n\r\nSalve, salve Estrella de los mares,\r\nEstrella de los mares,\r\nsalve, salve, salve, salve."}};
+
+    // REPRODUCTORES DUALES SEPARADOS EN HARDWARE
+    const audioBanda = document.getElementById('audioBandaMMT');
+    const audioCorneta = document.getElementById('audioCornetaMMT');
+
+    let itemMusicaSeleccionado = null;
+
+    // Web Audio API para asegurar que la corneta NO interrumpa la banda en móviles
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtxClass) {
+          audioCtx = new AudioCtxClass();
         }
       }
-      if(fallos){ packTxt('Pack incompleto: faltan '+fallos+' ficheros. Pulse reintentar cuando haya mejor señal.'); localStorage.removeItem('packIAB'); }
-      else{ packTxt('✔ Pack completo, listo para uso sin conexión'); packBar(100); localStorage.setItem('packIAB','ok'); }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
     }
-    for (var c=0;c<PACK_MODULOS.length;c++){
-      try{ await navigator.serviceWorker.register('../'+PACK_MODULOS[c]+'/sw.js',{scope:'../'+PACK_MODULOS[c]+'/'}); }catch(_){}
+
+    let activeCornetaSource = null;
+    const cornetaBuffers = {};
+
+    async function precargarBufferCorneta(url) {
+      const ctx = getAudioContext();
+      if (!ctx) return null;
+      if (cornetaBuffers[url]) return cornetaBuffers[url];
+      try {
+        const res = await fetch(url);
+        const arrayBuf = await res.arrayBuffer();
+        const decoded = await ctx.decodeAudioData(arrayBuf);
+        cornetaBuffers[url] = decoded;
+        return decoded;
+      } catch(e) {
+        return null;
+      }
     }
-  }catch(e){ packTxt('No se pudo preparar el pack. Reintente con conexión.'); }
-  packOcupado=false; if(btn) btn.disabled=false;
-}
-window.addEventListener('online',function(){ if(localStorage.getItem('packIAB')!=='ok') instalarPackIAB(false); });
-window.addEventListener('load',function(){
-  if(navigator.onLine) setTimeout(function(){ instalarPackIAB(false); },1500);
-  else packTxt(localStorage.getItem('packIAB')==='ok' ? '✔ Pack listo para uso sin conexión' : 'Sin conexión: el pack aún no está descargado');
-});
-</script>
+
+    // ESTADO DE PLAYLISTS
+    let indicePistaSeleccionadaEnVentana = -1;
+    let playlistsGuardadas = {
+      "lista_ejemplo": [
+        {
+                "tipo": "corneta",
+                "id": "co_firmes",
+                "nombre": "Firmes"
+        },
+        {
+                "tipo": "corneta",
+                "id": "co_sobreelhombroderecho",
+                "nombre": "Sobre el hombro derecho"
+        },
+        {
+                "tipo": "corneta",
+                "id": "co_defrente",
+                "nombre": "De frente"
+        },
+        {
+                "tipo": "musica",
+                "id": "mm_ganandobarlovento",
+                "nombre": "Ganando Barlovento"
+        },
+        {
+                "tipo": "musica",
+                "id": "mm_lascorsarias",
+                "nombre": "Las corsarias"
+        },
+        {
+                "tipo": "musica",
+                "id": "mm_sanmarcial",
+                "nombre": "San Marcial"
+        },
+        {
+                "tipo": "musica",
+                "id": "mm_sanquintin",
+                "nombre": "San Quintin"
+        },
+        {
+                "tipo": "musica",
+                "id": "mm_elturuta",
+                "nombre": "El turuta"
+        },
+        {
+                "tipo": "musica",
+                "id": "mm_laorgiadorada",
+                "nombre": "La Orgia Dorada"
+        },
+        {
+                "tipo": "musica",
+                "id": "mm_bajoladobleaguila",
+                "nombre": "Bajo La Doble Aguila"
+        },
+        {
+                "tipo": "musica",
+                "id": "mm_elabanico",
+                "nombre": "El abanico"
+        },
+        {
+                "tipo": "corneta",
+                "id": "co_alto",
+                "nombre": "Alto"
+        },
+        {
+                "tipo": "corneta",
+                "id": "co_sobreelhombroderecho",
+                "nombre": "Sobre el hombro derecho"
+        },
+        {
+                "tipo": "corneta",
+                "id": "co_descanso",
+                "nombre": "Descanso"
+        }
+]
+    };
+    let playlistEnCurso = false;
+    let playlistIndexActual = 0;
+
+        // Cargar persistencia
+    try {
+      const st = localStorage.getItem('mmt_playlists_v3_1792959260');
+      if (st) {
+        playlistsGuardadas = JSON.parse(st);
+      } else {
+        localStorage.setItem('mmt_playlists_v3_1792959260', JSON.stringify(playlistsGuardadas));
+      }
+    } catch(e) {}
+
+    // ==========================================
+    // COMPORTAMIENTO SINCRONIZADO DE LOS 4 DESPLEGABLES DE MÚSICA
+    // ==========================================
+    const selectIds = [
+      'selCatInstitucionales',
+      'selCatMarchas',
+      'selCatHimnos',
+      'selCatReligiosa'
+    ];
+
+    function onMusicaSelectChange(activeSelect, cat) {
+      const val = activeSelect.value;
+
+      selectIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el !== activeSelect) {
+          el.value = '';
+          el.classList.remove('selected');
+        }
+      });
+
+      if (val) {
+        activeSelect.classList.add('selected');
+        itemMusicaSeleccionado = TODAS_MUSICAS.find(m => m.id === val);
+      } else {
+        activeSelect.classList.remove('selected');
+        itemMusicaSeleccionado = null;
+      }
+
+      actualizarEstadoBotonLetra();
+    }
+
+    function actualizarEstadoBotonLetra() {
+      const btnL = document.getElementById('btnLyricsBandaCommon');
+      if (!btnL) return;
+      if (itemMusicaSeleccionado && itemMusicaSeleccionado.letraId && LETRAS_DB[itemMusicaSeleccionado.letraId]) {
+        btnL.style.opacity = '1';
+        btnL.style.pointerEvents = 'auto';
+        btnL.style.borderColor = '#38bdf8';
+        btnL.style.color = '#38bdf8';
+      } else {
+        btnL.style.opacity = '0.5';
+        btnL.style.borderColor = '#475569';
+        btnL.style.color = '#94a3b8';
+      }
+    }
+
+    // ==========================================
+    // CANAL 1: BANDA DE MÚSICA (ROBUSTO CON URL DIRECTA Y FALLBACK)
+    let bandaReproduciendo = false;
+
+    audioBanda.onplaying = () => {
+      bandaReproduciendo = true;
+      const statusBox = document.getElementById('statusBandaMMT');
+      if (statusBox) statusBox.style.display = 'flex';
+    };
+
+    audioBanda.onended = () => {
+      onBandaFin();
+      if (playlistEnCurso) avanzarPlaylistPasoMMT();
+    };
+
+    function playMusicaSeleccionadaMMT() {
+      if (!itemMusicaSeleccionado) {
+        alert('Por favor, seleccione primero un himno o marcha en cualquiera de los cuatro desplegables.');
+        return;
+      }
+      playBandaAudioItem(itemMusicaSeleccionado);
+    }
+
+    function playBandaAudioItem(item) {
+      stopBandaMMT();
+
+      const statusBox = document.getElementById('statusBandaMMT');
+      const statusText = document.getElementById('statusBandaTextMMT');
+      if (statusBox) statusBox.style.display = 'flex';
+      if (statusText) statusText.textContent = '🎺 ' + item.nombre;
+
+      bandaReproduciendo = true;
+
+      // Determinar la mejor fuente de audio: si tiene urlRemota y no es una de las pistas locales conocidas, usar urlRemota directamente
+      let sourceUrl = item.archivo;
+      if (item.urlRemota) {
+        // Si es de anthems o musicamilitaresp remota, usar la URL remota directa para evitar el 404 local
+        sourceUrl = item.urlRemota;
+      }
+
+      audioBanda.onerror = (e) => {
+        console.warn('Error en fuente principal, intentando alternativa...', e);
+        if (sourceUrl !== item.archivo && item.archivo) {
+          audioBanda.src = item.archivo;
+          audioBanda.play().catch(err => {
+            console.error('Error final reproduciendo:', err);
+            onBandaFin();
+            if (playlistEnCurso) avanzarPlaylistPasoMMT();
+          });
+        } else if (sourceUrl !== item.urlRemota && item.urlRemota) {
+          audioBanda.src = item.urlRemota;
+          audioBanda.play().catch(err => {
+            console.error('Error final remoto:', err);
+            onBandaFin();
+            if (playlistEnCurso) avanzarPlaylistPasoMMT();
+          });
+        } else {
+          onBandaFin();
+          if (playlistEnCurso) avanzarPlaylistPasoMMT();
+        }
+      };
+
+      audioBanda.src = sourceUrl;
+      audioBanda.currentTime = 0;
+      audioBanda.play().catch(err => {
+        // En móviles o por cambio de src, si falla el primer play, esperar al onerror o reintentar
+        console.warn('Play pendiente de carga:', err);
+      });
+    }
+
+    function stopBandaMMT() {
+      bandaReproduciendo = false;
+      try { audioBanda.pause(); audioBanda.currentTime = 0; } catch(e){}
+      onBandaFin();
+    }
+
+    function onBandaFin() {
+      bandaReproduciendo = false;
+      const statusBox = document.getElementById('statusBandaMMT');
+      if (statusBox) statusBox.style.display = 'none';
+    }
+
+    // ==========================================
+    // CANAL 2: TOQUES DE CORNETA (SIMULTÁNEO CON LA BANDA)
+    // ==========================================
+    audioCorneta.onended = () => {
+      onCornetaFin();
+    };
+    audioCorneta.onerror = () => {
+      onCornetaFin();
+    };
+
+    function playCornetaSeleccionadaMMT() {
+      const sel = document.getElementById('selCorneta');
+      const val = sel ? sel.value : '';
+      if (!val) {
+        alert('Por favor, seleccione un toque de corneta.');
+        return;
+      }
+      const item = CORNETAS_DB.find(c => c.id === val);
+      if (item) playCornetaAudioItem(item);
+    }
+
+    async function playCornetaAudioItem(item) {
+      stopCornetaMMT();
+      const statusBox = document.getElementById('statusCornetaMMT');
+      const statusText = document.getElementById('statusCornetaTextMMT');
+      if (statusBox) statusBox.style.display = 'flex';
+      if (statusText) statusText.textContent = '📯 ' + item.nombre;
+
+      const ctx = getAudioContext();
+      if (ctx) {
+        try {
+          const buffer = await precargarBufferCorneta(item.archivo) || (item.urlRemota ? await precargarBufferCorneta(item.urlRemota) : null);
+          if (buffer) {
+            const srcNode = ctx.createBufferSource();
+            srcNode.buffer = buffer;
+            srcNode.connect(ctx.destination);
+            srcNode.onended = () => { onCornetaFin(); };
+            activeCornetaSource = srcNode;
+            srcNode.start(0);
+            return;
+          }
+        } catch(e) {
+          console.warn('Fallback a audio tag corneta:', e);
+        }
+      }
+
+      audioCorneta.src = item.archivo;
+      audioCorneta.currentTime = 0;
+      audioCorneta.play().catch(e => {
+        if (item.urlRemota) {
+          audioCorneta.src = item.urlRemota;
+          audioCorneta.play().catch(err => onCornetaFin());
+        } else {
+          onCornetaFin();
+        }
+      });
+    }
+
+    function stopCornetaMMT() {
+      if (activeCornetaSource) {
+        try { activeCornetaSource.stop(); } catch(e){}
+        activeCornetaSource = null;
+      }
+      try { audioCorneta.pause(); audioCorneta.currentTime = 0; } catch(e){}
+      onCornetaFin();
+    }
+
+    function onCornetaFin() {
+      activeCornetaSource = null;
+      const statusBox = document.getElementById('statusCornetaMMT');
+      if (statusBox) statusBox.style.display = 'none';
+      // Canal de corneta manual independiente
+    }
+
+    function addCornetaSeleccionadaAPlaylistMMT() {
+      const sel = document.getElementById('selCorneta');
+      const val = sel ? sel.value : '';
+      if (!val) {
+        alert('Seleccione un toque de corneta para añadirlo a la lista de reproducción.');
+        return;
+      }
+      const item = CORNETAS_DB.find(c => c.id === val);
+      if (!item) return;
+
+      const selPl = document.getElementById('selPlaylistActiva');
+      const key = selPl ? selPl.value : 'desfile_standard';
+      if (!playlistsGuardadas[key]) playlistsGuardadas[key] = [];
+      playlistsGuardadas[key].push({
+        tipo: 'corneta',
+        id: item.id,
+        nombre: item.nombre
+      });
+      guardarListaActualMMT(true);
+      renderVentanaPlaylistMMT();
+    }
+
+    // ==========================================
+    // BLOQUE 3: LISTAS DE REPRODUCCIÓN (PLAYLISTS)
+    // ==========================================
+    function cambiarPlaylistActivaMMT(key) {
+      indicePistaSeleccionadaEnVentana = -1;
+      renderVentanaPlaylistMMT();
+    }
+
+    function renderVentanaPlaylistMMT() {
+      const cont = document.getElementById('playlistWindowContainer');
+      if (!cont) return;
+      cont.innerHTML = '';
+
+      const sel = document.getElementById('selPlaylistActiva');
+      const key = sel ? sel.value : 'lista_ejemplo';
+      const items = playlistsGuardadas[key] || [];
+
+      if (items.length === 0) {
+        cont.innerHTML = '<div style="color:#64748b; font-size:12px; text-align:center; padding:24px;">La lista de reproducción está vacía.<br>Seleccione canciones o toques arriba y pulse <b>AÑADIR A LISTA</b>.</div>';
+        return;
+      }
+
+      items.forEach((it, idx) => {
+        const row = document.createElement('div');
+        let classes = 'pl-item-row';
+        if (idx === indicePistaSeleccionadaEnVentana) classes += ' selected';
+        if (playlistEnCurso && idx === playlistIndexActual) classes += ' active-playing';
+        row.className = classes;
+
+        const icono = (it.tipo === 'corneta') ? '📯' : '🎺';
+        row.innerHTML = `
+          <span>${idx + 1}. ${icono} ${it.nombre}</span>
+          <span style="font-size:10px; opacity:0.6; text-transform:uppercase;">${it.tipo}</span>
+        `;
+        row.onclick = () => {
+          indicePistaSeleccionadaEnVentana = idx;
+          renderVentanaPlaylistMMT();
+        };
+        cont.appendChild(row);
+      });
+    }
+
+    function subirPistaSeleccionadaMMT() {
+      const sel = document.getElementById('selPlaylistActiva');
+      const key = sel ? sel.value : 'lista_ejemplo';
+      const items = playlistsGuardadas[key] || [];
+      if (indicePistaSeleccionadaEnVentana > 0 && indicePistaSeleccionadaEnVentana < items.length) {
+        const temp = items[indicePistaSeleccionadaEnVentana];
+        items[indicePistaSeleccionadaEnVentana] = items[indicePistaSeleccionadaEnVentana - 1];
+        items[indicePistaSeleccionadaEnVentana - 1] = temp;
+        indicePistaSeleccionadaEnVentana--;
+        renderVentanaPlaylistMMT();
+      }
+    }
+
+    function bajarPistaSeleccionadaMMT() {
+      const sel = document.getElementById('selPlaylistActiva');
+      const key = sel ? sel.value : 'lista_ejemplo';
+      const items = playlistsGuardadas[key] || [];
+      if (indicePistaSeleccionadaEnVentana >= 0 && indicePistaSeleccionadaEnVentana < items.length - 1) {
+        const temp = items[indicePistaSeleccionadaEnVentana];
+        items[indicePistaSeleccionadaEnVentana] = items[indicePistaSeleccionadaEnVentana + 1];
+        items[indicePistaSeleccionadaEnVentana + 1] = temp;
+        indicePistaSeleccionadaEnVentana++;
+        renderVentanaPlaylistMMT();
+      }
+    }
+
+    function borrarPistaSeleccionadaMMT() {
+      const sel = document.getElementById('selPlaylistActiva');
+      const key = sel ? sel.value : 'lista_ejemplo';
+      const items = playlistsGuardadas[key] || [];
+      if (indicePistaSeleccionadaEnVentana >= 0 && indicePistaSeleccionadaEnVentana < items.length) {
+        items.splice(indicePistaSeleccionadaEnVentana, 1);
+        if (indicePistaSeleccionadaEnVentana >= items.length) {
+          indicePistaSeleccionadaEnVentana = items.length - 1;
+        }
+        renderVentanaPlaylistMMT();
+      }
+    }
+
+    function guardarListaActualMMT(silencioso = false) {
+      try {
+        localStorage.setItem('mmt_playlists_v3_1792959260', JSON.stringify(playlistsGuardadas));
+        if (!silencioso) {
+          alert('✅ Lista de reproducción guardada con éxito.');
+        }
+      } catch(e) {
+        console.error('Error al guardar:', e);
+      }
+    }
+
+        function borrarListaActualPromptMMT() {
+      const sel = document.getElementById('selPlaylistActiva');
+      const key = sel ? sel.value : '';
+      if (!key) return;
+
+      if (key === 'lista_ejemplo') {
+        if (!confirm("¿Desea vaciar o eliminar la 'Lista Ejemplo'?")) return;
+      } else {
+        if (!confirm(`¿Desea eliminar definitivamente la lista '${key.replace(/_/g, ' ').toUpperCase()}'?`)) return;
+      }
+
+      delete playlistsGuardadas[key];
+      if (Object.keys(playlistsGuardadas).length === 0) {
+        playlistsGuardadas['mi_lista'] = [];
+      }
+      guardarListaActualMMT(true);
+      refrescarSelectPlaylists();
+      renderVentanaPlaylistMMT();
+    }
+
+    function crearNuevaListaPromptMMT() {
+      const nombre = prompt('Nombre de la nueva lista (ej: Jura de Bandera):');
+      if (!nombre || !nombre.trim()) return;
+      const key = nombre.trim().toLowerCase().replace(/\s+/g, '_');
+      if (!playlistsGuardadas[key]) {
+        playlistsGuardadas[key] = [];
+        guardarListaActualMMT(true);
+        refrescarSelectPlaylists();
+        const sel = document.getElementById('selPlaylistActiva');
+        if (sel) sel.value = key;
+        cambiarPlaylistActivaMMT(key);
+      }
+    }
+
+    function refrescarSelectPlaylists() {
+      const sel = document.getElementById('selPlaylistActiva');
+      if (!sel) return;
+      const actual = sel.value;
+      sel.innerHTML = '';
+      Object.keys(playlistsGuardadas).forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = '🎖️ ' + k.replace(/_/g, ' ').toUpperCase();
+        sel.appendChild(opt);
+      });
+      if (playlistsGuardadas[actual]) sel.value = actual;
+    }
+
+    function iniciarPlaylistMMT() {
+      const sel = document.getElementById('selPlaylistActiva');
+      const key = sel ? sel.value : 'lista_ejemplo';
+      const items = playlistsGuardadas[key] || [];
+      if (items.length === 0) {
+        alert('La lista está vacía.');
+        return;
+      }
+      detenerPlaylistMMT();
+      playlistEnCurso = true;
+      playlistIndexActual = 0;
+      ejecutarItemPlaylistIndex(key, playlistIndexActual);
+    }
+
+    function ejecutarItemPlaylistIndex(key, index) {
+      const items = playlistsGuardadas[key] || [];
+      if (index >= items.length) {
+        detenerPlaylistMMT();
+        return;
+      }
+      renderVentanaPlaylistMMT();
+      const it = items[index];
+
+      // Toda la playlist se reproduce por el canal de la Banda de forma unificada y secuencial
+      if (it.tipo === 'corneta') {
+        const track = CORNETAS_DB.find(c => c.id === it.id);
+        if (track) {
+          playBandaAudioItem({
+            id: track.id,
+            nombre: '📯 ' + track.nombre,
+            archivo: track.archivo,
+            urlRemota: track.urlRemota
+          });
+        } else {
+          avanzarPlaylistPasoMMT();
+        }
+      } else {
+        const track = TODAS_MUSICAS.find(m => m.id === it.id);
+        if (track) {
+          playBandaAudioItem(track);
+        } else {
+          avanzarPlaylistPasoMMT();
+        }
+      }
+    }
+
+        function saltarSiguientePistaPlaylistMMT() {
+      const sel = document.getElementById('selPlaylistActiva');
+      const key = sel ? sel.value : 'lista_ejemplo';
+      const items = playlistsGuardadas[key] || [];
+      if (items.length === 0) return;
+
+      if (!playlistEnCurso) {
+        // Si no estaba iniciada, arranca en la siguiente o en la seleccionada
+        playlistEnCurso = true;
+        if (indicePistaSeleccionadaEnVentana >= 0 && indicePistaSeleccionadaEnVentana < items.length - 1) {
+          playlistIndexActual = indicePistaSeleccionadaEnVentana + 1;
+        } else {
+          playlistIndexActual = (playlistIndexActual + 1) % items.length;
+        }
+      } else {
+        playlistIndexActual++;
+        if (playlistIndexActual >= items.length) {
+          detenerPlaylistMMT();
+          return;
+        }
+      }
+      ejecutarItemPlaylistIndex(key, playlistIndexActual);
+    }
+
+    function avanzarPlaylistPasoMMT() {
+      if (!playlistEnCurso) return;
+      const sel = document.getElementById('selPlaylistActiva');
+      const key = sel ? sel.value : 'lista_ejemplo';
+      playlistIndexActual++;
+      ejecutarItemPlaylistIndex(key, playlistIndexActual);
+    }
+
+    function detenerPlaylistMMT() {
+      playlistEnCurso = false;
+      playlistIndexActual = 0;
+      stopBandaMMT();
+      stopCornetaMMT();
+      renderVentanaPlaylistMMT();
+    }
+
+    // ==========================================
+    // MODAL DE LETRAS
+    // ==========================================
+    function mostrarLetraModalMMT(letraKey) {
+      const data = LETRAS_DB[letraKey];
+      if (!data) return;
+
+      document.getElementById('modalLyricsTitle').textContent = data.title;
+      document.getElementById('modalLyricsAuthor').textContent = data.author;
+      document.getElementById('modalLyricsText').textContent = data.text;
+
+      const modal = document.getElementById('lyricsModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function cerrarLyricsModalMMT(e) {
+      const modal = document.getElementById('lyricsModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    // WakeLock API
+    if ('wakeLock' in navigator) {
+      let wakeLock = null;
+      async function requestWakeLock() {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+        } catch (err) {}
+      }
+      document.addEventListener('visibilitychange', () => {
+        if (wakeLock !== null && document.visibilityState === 'visible') {
+          requestWakeLock();
+        }
+      });
+      requestWakeLock();
+    }
+
+    // INICIALIZACIÓN
+    window.addEventListener('DOMContentLoaded', () => {
+      refrescarSelectPlaylists();
+      renderVentanaPlaylistMMT();
+      actualizarEstadoBotonLetra();
+    });
+  </script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
 </body>
 </html>
